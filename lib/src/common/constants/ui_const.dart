@@ -7,4 +7,7 @@ class UIConst {
   static const double defaultFontSize = 14;
   static const double mediumFontSize = 16;
   static const String appName = 'Construction Estimator';
+
+  static const double horizontalPadding = 16;
+  static const double verticalPadding = 12;
 }

@@ -61,7 +61,7 @@ final class AppButton extends StatelessWidget {
     this.isLogin,
     this.titleAlignment = MainAxisAlignment.center,
     this.titlePadding = EdgeInsets.zero,
-    this.spacing = 16,
+    this.spacing = 4,
     this.resultHandler,
   });
 
@@ -91,18 +91,18 @@ final class AppButton extends StatelessWidget {
 
   Widget _buildTitle(BuildContext context, Widget? prefixIcon) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           height: height?.h ?? UIConst.defaultHeightButton.h,
           width: width?.w,
           margin: margin,
           decoration: BoxDecoration(
-            color:
-                isButtonDisabled
-                    ? Colors.grey
-                    : isOutLineButton
-                    ? style.backgroundColor ?? Colors.transparent
-                    : style.backgroundColor ?? ColorName.primary,
+            color: isButtonDisabled
+                ? Colors.grey
+                : isOutLineButton
+                ? style.backgroundColor ?? Colors.transparent
+                : style.backgroundColor ?? ColorName.primary,
             gradient: style.gradient,
             borderRadius: BorderRadius.circular(
               style.radius ?? UIConst.defaultCornerRadiusButton,
@@ -113,7 +113,9 @@ final class AppButton extends StatelessWidget {
                   width: isOutLineButton ? style.borderWidth.h : UIConst.zero,
                   color:
                       style.borderColor ??
-                      (isOutLineButton ? Colors.grey : Colors.transparent),
+                      (isOutLineButton
+                          ? ColorName.primary
+                          : Colors.transparent),
                 ),
           ),
           child: Visibility(
@@ -141,7 +143,7 @@ final class AppButton extends StatelessWidget {
                                 color:
                                     style.textColor ??
                                     (isOutLineButton
-                                        ? ColorName.black07
+                                        ? ColorName.primary
                                         : ColorName.whiteFE),
                               ),
                         ),
@@ -149,7 +151,9 @@ final class AppButton extends StatelessWidget {
                     ],
                   ),
                 ),
-            child: Center(child: loading ?? CircularProgressIndicator(color: Colors.white,)),
+            child: Center(
+              child: loading ?? CircularProgressIndicator(color: Colors.white),
+            ),
           ),
         ),
         Visibility(
@@ -164,12 +168,12 @@ final class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      onPressed:
-          isButtonDisabled
-              ? null
-              : () {
-                onPressed?.call();
-              }, minimumSize: Size(0, 0),
+      onPressed: isButtonDisabled
+          ? null
+          : () {
+              onPressed?.call();
+            },
+      minimumSize: Size(0, 0),
       child: _buildTitle(context, prefixIcon),
     );
   }

@@ -15,7 +15,7 @@ abstract class ApiModule {
   String get apiUrl => AppEnvironment.apiUrl;
 
   @singleton
-  @Named('dio')
+  @Named('appDio')
   Dio dio(@Named('apiUrl') String url, Talker talker) =>
       Dio(
           BaseOptions(

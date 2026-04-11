@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'src/common/utils/app_environment.dart';
 import 'src/common/utils/getit_utils.dart';
@@ -25,8 +26,9 @@ void main() {
 
       await AppEnvironment.setup();
       await AppStorage.setup();
-      // await RecentPlantHiveRepository.init();
       await GetItUtils.setup();
+
+      await initializeDateFormatting();
 
       final talker = getIt<Talker>();
       _setupErrorHooks(talker);
@@ -34,6 +36,8 @@ void main() {
       Bloc.observer = TalkerBlocObserver(talker: talker);
 
       runApp(OnlyOnePointerRecognizerWidget(child: AppWidget()));
+
+      AppStorage.setUserId('H415iT0ZltboZsygjIZN');
     },
     (error, stack) {
       getIt<Talker>().handle(error, stack);

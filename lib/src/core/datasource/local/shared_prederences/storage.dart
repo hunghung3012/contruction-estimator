@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 
@@ -43,10 +44,36 @@ class AppStorage {
     throw Exception('Type not supported!');
   }
 
-  static String? get lang => _get(AppStorageKeys.lang);
-  static Future setLang(String? val) => _set(AppStorageKeys.lang, val);
- 
-  static bool get isFirstTimeOnApp => _get(AppStorageKeys.isFirstTimeOnApp) ?? true;
-  static Future setFirstTimeOnApp(bool? val) => _set(AppStorageKeys.isFirstTimeOnApp, val);
-  
+  static String? get language => _get(AppStorageKeys.language);
+  static Future setLanguage(String? val) => _set(AppStorageKeys.language, val);
+
+  static bool get isFirstTimeOnApp =>
+      _get(AppStorageKeys.isFirstTimeOnApp) ?? true;
+  static Future setFirstTimeOnApp(bool? val) =>
+      _set(AppStorageKeys.isFirstTimeOnApp, val);
+
+  static String? get userId => _get(AppStorageKeys.userId);
+  static Future setUserId(String? val) => _set(AppStorageKeys.userId, val);
+
+  static Map<String, int> get statusColors {
+    final jsonStr = _get<String>(AppStorageKeys.statusColors);
+    if (jsonStr == null) return {};
+    try {
+      return Map<String, int>.from(json.decode(jsonStr));
+    } catch (_) {
+      return {};
+    }
+  }
+
+  static Future setStatusColor(String id, int colorValue) {
+    final map = statusColors;
+    map[id] = colorValue;
+    return _set(AppStorageKeys.statusColors, json.encode(map));
+  }
+
+  static Future<void> removeStatusColor(String id) async {
+    final map = statusColors;
+    map.remove(id);
+    return _set(AppStorageKeys.statusColors, json.encode(map));
+  }
 }

@@ -1,0 +1,40 @@
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../../../../common/constants/api_endpoint.dart';
+import '../../../../core/datasource/remote/base/api_response.dart';
+import '../../../invoice/domain/model/invoice.dart';
+import '../../../proposal/domain/model/proposal.dart';
+import '../../domain/model/estimate.dart';
+
+part 'estimate_service.g.dart';
+
+@RestApi()
+@injectable
+abstract class EstimateService {
+  @factoryMethod
+  factory EstimateService(@Named('appDio') Dio dio) = _EstimateService;
+
+  @PATCH(ApiEndpoint.updateEstimate)
+  Future<SingleApiResponse<Estimate>> update(
+    @Path('id') String id,
+    @Query('userId') String userId,
+    @Body() Estimate request,
+    @CancelRequest() CancelToken? cancelToken,
+  );
+
+  @POST(ApiEndpoint.convertEstimateToInvoice)
+  Future<SingleApiResponse<Invoice>> convertToInvoice(
+    @Path('userId') String userId,
+    @Path('estimateId') String estimateId,
+    @CancelRequest() CancelToken? cancelToken,
+  );
+
+  @POST(ApiEndpoint.convertEstimateToProposal)
+  Future<SingleApiResponse<Proposal>> convertToProposal(
+    @Path('userId') String userId,
+    @Path('estimateId') String estimateId,
+    @CancelRequest() CancelToken? cancelToken,
+  );
+}

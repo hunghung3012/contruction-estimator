@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../generated/colors.gen.dart';
+import '../constants/ui_const.dart';
 import '../extension/context_x.dart';
 import '../extension/string_x.dart';
 
@@ -73,10 +74,9 @@ class AppText extends StatelessWidget {
         onTap: () => onTap?.call(),
         child: Container(
           padding: padding,
-          child:
-              prefix == null
-                  ? enableAutoResize
-                      ? AutoSizeText(
+          child: prefix == null
+              ? enableAutoResize
+                    ? AutoSizeText(
                         text?.getTextByCasing(textCase) ?? '',
                         minFontSize: minFontSize,
                         overflow: overflow,
@@ -84,8 +84,8 @@ class AppText extends StatelessWidget {
                         textAlign: textAlign ?? TextAlign.center,
                         style: context.textTheme.regular.copyWith(
                           color: textColor ?? ColorName.black07,
-                          fontWeight: fontWeight ?? FontWeight.w500,
-                          fontSize: fontSize?.sp ?? 16.sp,
+                          fontWeight: fontWeight ?? FontWeight.w400,
+                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
                           height: height?.h ?? 1,
                           fontStyle: fontStyle,
                           decoration: decoration,
@@ -93,15 +93,15 @@ class AppText extends StatelessWidget {
                           letterSpacing: letterSpacing,
                         ),
                       )
-                      : Text(
+                    : Text(
                         text?.getTextByCasing(textCase) ?? '',
                         overflow: overflow,
                         maxLines: maxLines,
                         textAlign: textAlign ?? TextAlign.center,
                         style: context.textTheme.regular.copyWith(
                           color: textColor ?? ColorName.black07,
-                          fontWeight: fontWeight ?? FontWeight.w500,
-                          fontSize: fontSize?.sp ?? 16.sp,
+                          fontWeight: fontWeight ?? FontWeight.w400,
+                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
                           height: height?.h ?? 1,
                           fontStyle: fontStyle,
                           decoration: decoration,
@@ -109,51 +109,52 @@ class AppText extends StatelessWidget {
                           letterSpacing: letterSpacing,
                         ),
                       )
-                  : Row(
-                    mainAxisAlignment:
-                        mainAxisAlignment ?? MainAxisAlignment.center,
-                    children: [
-                      prefix!,
-                      SizedBox(width: spacing),
-                      if (enableAutoResize)
-                        AutoSizeText(
+              : Row(
+                  mainAxisAlignment:
+                      mainAxisAlignment ?? MainAxisAlignment.center,
+                  children: [
+                    prefix!,
+                    SizedBox(width: spacing),
+                    if (enableAutoResize)
+                      AutoSizeText(
+                        text?.getTextByCasing(textCase) ?? '',
+                        overflow: overflow,
+                        maxLines: maxLines,
+                        minFontSize: minFontSize.sp,
+                        textAlign: textAlign ?? TextAlign.center,
+                        style: context.textTheme.regular.copyWith(
+                          color: textColor ?? ColorName.black07,
+                          fontWeight: fontWeight ?? FontWeight.w400,
+                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                          height: height?.h ?? 1,
+                          fontStyle: fontStyle,
+                          decoration: decoration,
+                          decorationColor: textColor,
+                          letterSpacing: letterSpacing,
+                        ),
+                      )
+                    else
+                      Flexible(
+                        child: Text(
                           text?.getTextByCasing(textCase) ?? '',
                           overflow: overflow,
                           maxLines: maxLines,
-                          minFontSize: minFontSize.sp,
                           textAlign: textAlign ?? TextAlign.center,
                           style: context.textTheme.regular.copyWith(
                             color: textColor ?? ColorName.black07,
-                            fontWeight: fontWeight ?? FontWeight.w500,
-                            fontSize: fontSize?.sp ?? 16.sp,
-                            height: height?.h ?? 1,
+                            fontWeight: fontWeight ?? FontWeight.w400,
+                            fontSize:
+                                fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                            height: height?.h,
                             fontStyle: fontStyle,
                             decoration: decoration,
                             decorationColor: textColor,
                             letterSpacing: letterSpacing,
                           ),
-                        )
-                      else
-                        Flexible(
-                          child: Text(
-                            text?.getTextByCasing(textCase) ?? '',
-                            overflow: overflow,
-                            maxLines: maxLines,
-                            textAlign: textAlign ?? TextAlign.center,
-                            style: context.textTheme.regular.copyWith(
-                              color: textColor ?? ColorName.black07,
-                              fontWeight: fontWeight ?? FontWeight.w500,
-                              fontSize: fontSize?.sp ?? 16.sp,
-                              height: height?.h,
-                              fontStyle: fontStyle,
-                              decoration: decoration,
-                              decorationColor: textColor,
-                              letterSpacing: letterSpacing,
-                            ),
-                          ),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
+                ),
         ),
       ),
     );

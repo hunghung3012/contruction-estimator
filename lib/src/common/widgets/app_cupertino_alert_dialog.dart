@@ -13,7 +13,7 @@ class AppCupertinoAlertDialog extends StatelessWidget {
   final Color? titleColor;
   final String? submitButtonTitle;
   final VoidCallback? onSubmit;
-  final VoidCallback? onCancelWithoutPop;
+  final VoidCallback? onCancel;
   final VoidCallback? onSubmitWithoutPop;
   const AppCupertinoAlertDialog({
     super.key,
@@ -22,7 +22,7 @@ class AppCupertinoAlertDialog extends StatelessWidget {
     this.titleColor,
     this.onSubmit,
     this.submitButtonTitle,
-    this.onCancelWithoutPop,
+    this.onCancel,
     this.onSubmitWithoutPop,
   });
 
@@ -44,20 +44,19 @@ class AppCupertinoAlertDialog extends StatelessWidget {
       ),
       actions: [
         CupertinoDialogAction(
-          onPressed:
-              onCancelWithoutPop.isNotNull
-                  ? () => onCancelWithoutPop?.call()
-                  : () => Navigator.of(context).pop(),
+          onPressed: () {
+            onCancel?.call();
+            Navigator.of(context).pop();
+          },
           child: AppText(context.s.cancle, textColor: ColorName.black),
         ),
         CupertinoDialogAction(
-          onPressed:
-              onSubmitWithoutPop.isNotNull
-                  ? () => onSubmitWithoutPop?.call()
-                  : () {
-                    Navigator.pop(context);
-                    onSubmit?.call();
-                  },
+          onPressed: onSubmitWithoutPop.isNotNull
+              ? () => onSubmitWithoutPop?.call()
+              : () {
+                  Navigator.pop(context);
+                  onSubmit?.call();
+                },
           child: AppText(
             submitButtonTitle ?? context.s.confirm,
             textColor: titleColor ?? ColorName.primary,

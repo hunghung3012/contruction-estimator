@@ -96,12 +96,12 @@ class _InvoiceDetailBodyState extends State<InvoiceDetailBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    invoice.title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Invoice #: ${invoice.invoiceNumber}'),
+                  // Text(
+                  //   invoice.title,
+                  //   style: Theme.of(context).textTheme.titleLarge,
+                  // ),
+                  // const SizedBox(height: 8),
+                  // Text('Invoice #: ${invoice.invoiceNumber}'),
                   const SizedBox(height: 16),
                   Expanded(
                     child: ListView(
@@ -131,7 +131,6 @@ class _InvoiceDetailBodyState extends State<InvoiceDetailBody> {
           // EDIT MODE
           // ========================
 
-          _titleController.text = invoice.title;
           _taxController.text = invoice.taxPercent.toString();
           _discountController.text = invoice.discountPercent.toString();
 

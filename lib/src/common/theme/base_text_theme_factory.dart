@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// import '../../../generated/colors.gen.dart';
-// import '../../../generated/fonts.gen.dart';
+import '../../../generated/colors.gen.dart';
+import '../../../generated/fonts.gen.dart';
 import 'text_theme_factory.dart';
 
 abstract class BaseTextThemeFactory extends TextThemeFactory {
@@ -32,51 +32,51 @@ abstract class BaseTextThemeFactory extends TextThemeFactory {
 
   @override
   TextStyle get extraLight => const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w200,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.black07
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w200,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.black07,
+  );
 
   @override
   TextStyle get light => const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w300,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.black07
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.black07,
+  );
 
   @override
   TextStyle get regular => const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.black07
-      );
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.black07,
+  );
 
   @override
   TextStyle get semiBold => const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.whiteFE
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.whiteFE,
+  );
 
   @override
   TextStyle get bold => const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.black07
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.black07,
+  );
 
   @override
   TextStyle get extraBold => const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w700,
-      // fontFamily: FontFamily.roboto,
-      // color: ColorName.black07
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    fontFamily: FontFamily.roboto,
+    color: ColorName.black07,
+  );
 
   @override
   TextStyle get displayLarge => bold;
@@ -92,7 +92,7 @@ abstract class BaseTextThemeFactory extends TextThemeFactory {
   TextStyle get headlineMedium => bold;
   @override
   TextStyle get headlineSmall => semiBold.copyWith(fontSize: 18);
-  
+
   @override
   TextStyle get titleLarge => bold;
   @override
@@ -105,14 +105,16 @@ abstract class BaseTextThemeFactory extends TextThemeFactory {
   @override
   TextStyle get bodyMedium => bold;
   @override
-  TextStyle get bodySmall => semiBold.copyWith(fontSize: 18, 
-  // color: ColorName.whiteFE
+  TextStyle get bodySmall => semiBold.copyWith(
+    fontSize: 18,
+    // color: ColorName.whiteFE
   );
   @override
   TextStyle get labelLarge => bold;
   @override
-  TextStyle get labelMedium => semiBold.copyWith(fontSize: 18, 
-  // color: ColorName.whiteFE
+  TextStyle get labelMedium => semiBold.copyWith(
+    fontSize: 18,
+    // color: ColorName.whiteFE
   );
   @override
   TextStyle get labelSmall => bold;

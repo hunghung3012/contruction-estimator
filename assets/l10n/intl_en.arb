@@ -1,13 +1,40 @@
 {
     "@@locale": "en",
-
     "cancle": "Cancle",
-    
     "confirm": "Comfirm",
-
     "error": "Error",
     "enter": "Enter",
-
     "something_error": "Something error",
-    "success": "Successful"
+    "success": "Successful",
+    "manage_your_projects_with_ease": "Manage your projects with ease",
+    "create_project_description": "Create estimates with AI, send invoices, and track project value, all in one place.",
+    "create_project": "Create project",
+    "enter_a_title": "Enter a title",
+    "getting_started_try_these": "Getting started? Try these:",
+    "type_to_start_estimating": "Type to start estimating...",
+    "discard_changes": "Discard changes",
+    "unsaved_changes": "You have unsaved changes. Are you sure you want to discard them?",
+    "discard": "Discard",
+    "cancel": "Cancel",
+    "save": "Save",
+    "draft": "Draft",
+    "cost": "Cost",
+    "markup": "Markup",
+    "tax": "Tax",
+    "total": "Total",
+    "item_name": "Item Name",
+    "quantity": "Quantity",
+    "done": "Done",
+    "add_item": "Add Item",
+    "edit": "Edit",
+    "delete": "Delete",
+    "edit_item": "Edit Item",
+    "add_category": "Add Category",
+    "convert_to": "Convert to",
+    "invoice": "Invoice",
+    "proposal": "Proposal",
+    "location": "Location",
+    "no_assignee": "No assignee",
+    "client": "Client",
+    "status": "Status"
 }

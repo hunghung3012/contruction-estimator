@@ -19,6 +19,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   lottie: ^3.3.1
   shimmer: ^3.0.0
+  pull_down_button: ^0.10.2
 
   #camera
   image_picker: ^1.1.2
@@ -40,6 +41,7 @@ dependencies:
   equatable: ^2.0.7
   collection: ^1.19.1
   rxdart: ^0.27.7
+  event_bus: ^2.0.1
   http_parser: ^4.1.2
 
   #responsive
@@ -63,7 +65,7 @@ dependencies:
 
   #restful api
   dio: ^5.4.2+1
-  retrofit: 4.9.2
+  retrofit: ^4.4.2
 
   result_dart: ^1.1.1
 
@@ -90,15 +92,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.13 #^2.4.9
+  build_runner: ^2.7.0 #^2.4.9
   freezed: ^3.2.0
   json_serializable: ^6.7.1
   auto_route_generator: ^10.2.4
   flutter_gen_runner: ^5.4.0
   intl_utils: ^2.8.7
   injectable_generator: ^2.6.1
-  # retrofit_generator: ^10.0.3 #^10.2.3
-  isar_community_generator: 3.3.0
+  retrofit_generator: 10.2.3
+  # isar_community_generator: 3.3.0
 
 
 flutter:

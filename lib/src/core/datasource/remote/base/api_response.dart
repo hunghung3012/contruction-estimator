@@ -59,19 +59,31 @@ abstract class ListApiResponse<T> with _$ListApiResponse<T> {
   ) => _$ListApiResponseFromJson(json, fromJsonT);
 }
 
+@Freezed(genericArgumentFactories: true)
+abstract class PaginationResponse with _$PaginationResponse {
+  const factory PaginationResponse(bool hasNext, int? nextCursor) =
+      _PaginationResponse;
+
+  factory PaginationResponse.fromJson(Map<String, dynamic> json) =>
+      _$PaginationResponseFromJson(json);
+}
 
 @Freezed(genericArgumentFactories: true)
 abstract class PagingApiResponse<T> with _$PagingApiResponse<T> {
   const factory PagingApiResponse({
     required List<T> items,
+    required PaginationResponse pagination,
   }) = _PagingApiResponse;
 
   factory PagingApiResponse.fromJson(
     Map<String, dynamic> json,
     T Function(Object?) fromJsonT,
   ) {
+    final data = json['data'];
+
     return PagingApiResponse<T>(
-      items: (json['items'] as List<dynamic>).map(fromJsonT).toList(),
+      items: (data['items'] as List<dynamic>).map(fromJsonT).toList(),
+      pagination: PaginationResponse.fromJson(data['pagination']),
     );
   }
 }

@@ -1,8 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/app/app_router.dart';
 import '../cubit/invoice_cubit.dart';
 
 class InvoicePage extends StatelessWidget {
@@ -45,18 +43,18 @@ class _InvoiceBodyState extends State<InvoiceBody> {
             itemBuilder: (context, index) {
               final invoice = state.invoices[index];
 
-              return ListTile(
-                title: Text(invoice.title),
-                subtitle: Text(invoice.invoiceNumber),
-                onTap: ()  {
-                  context.router.push(InvoiceDetailRoute(invoiceId: invoice.id));
-                },
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () =>
-                      context.read<InvoiceCubit>().deleteInvoice(invoice.id),
-                ),
-              );
+              // return ListTile(
+              //   title: Text(invoice.title),
+              //   subtitle: Text(invoice.invoiceNumber),
+              //   onTap: ()  {
+              //     context.router.push(InvoiceDetailRoute(invoiceId: invoice.id));
+              //   },
+              //   trailing: IconButton(
+              //     icon: const Icon(Icons.delete),
+              //     onPressed: () =>
+              //         context.read<InvoiceCubit>().deleteInvoice(invoice.id),
+              //   ),
+              // );
             },
           );
         },

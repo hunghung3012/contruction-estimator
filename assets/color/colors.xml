@@ -4,7 +4,21 @@
 
     <color name="whiteFE">#FEFEFE</color>
     <color name="white">#FFFFFF</color>
+    <color name="whiteEE">#EEEEEE</color>
 
     <color name="black07">#070707</color>
     <color name="black">#000000</color>
+    <color name="black33">#333333</color>
+    
+
+    <color name="grayF0">#F0F0F0</color>
+    <color name="gray77">#777777</color>
+    <color name="gray99">#999999</color>
+    <color name="gray55">#555555</color>
+    <color name="grayCC">#CCCCCC</color>
+    <color name="grayAA">#AAAAAA</color>
+
+    <color name="grayF3">#F3F4F6</color>
+    <color name="grayE8">#E8E8E8</color>
+    
 </resources> 
