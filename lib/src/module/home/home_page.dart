@@ -39,7 +39,7 @@ class _HomeBodyState extends State<HomeBody> {
             index: state.currentIndex,
             children: [
               const ProjectPage(),
-              const InvoicePage(),
+              ModernInvoiceScreen(),
               const ProposalPage(),
               const ClientPage(),
             ],

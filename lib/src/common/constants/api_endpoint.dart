@@ -21,4 +21,14 @@ class ApiEndpoint {
       '/users/{userId}/project-statuses/{statusId}';
   static const String deleteStatus =
       '/users/{userId}/project-statuses/{statusId}';
+
+  // ? Invoices
+  static const invoices = '/users/{userId}/invoices';
+
+  // static const invoiceDetail = '/api/v2/invoices/{invoiceId}';
+  static const createInvoice = '/users/{userId}/invoices';
+
+  static const updateInvoice = '/invoices/{invoiceId}';
+  static const deleteInvoice = '/invoices/{invoiceId}';
+  static const deleteAllInvoices = '/users/{userId}/invoices';
 }
