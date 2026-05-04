@@ -1,4 +1,4 @@
-part of '../project_page.dart';
+part of '../project_tab.dart';
 
 class _ProjectCard extends StatelessWidget {
   final Project project;

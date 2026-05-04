@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:construction_estimator/src/common/event/reload_project_list_event.dart';
-import 'package:construction_estimator/src/module/invoice/data/request/invoice_request.dart';
-import 'package:construction_estimator/src/module/invoice/domain/repository/invoice_repository.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../common/utils/logger.dart';
 import '../domain/model/invoice.dart';
+import '../domain/repository/invoice_repository.dart';
 
 part 'invoice_state.dart';
 
@@ -18,29 +15,10 @@ part 'invoice_cubit.freezed.dart';
 @lazySingleton
 class InvoiceCubit extends Cubit<InvoiceState> {
   final InvoiceRepository _repository;
-  final EventBus _eventBus;
-  late final StreamSubscription _reloadSubscription;
 
-  StreamSubscription<List<Invoice>>? _sub;
-
-  InvoiceCubit(this._repository, this._eventBus)
+  InvoiceCubit(this._repository)
     : super(InvoiceState.initial([], false, null)) {
     loadInvoices();
-    // _listenInvoices();
-
-    _reloadSubscription = _eventBus.on<ReloadProjectListEvent>().listen((_) {});
-  }
-
-  void _listenInvoices() {
-    // _sub = _repository.watchAllInvoices().listen((invoices) {
-    //   emit(state.copyWith(invoices: invoices));
-    // });
-  }
-
-  @override
-  Future<void> close() async {
-    await _sub?.cancel();
-    return super.close();
   }
 
   Future<void> loadInvoices({String? projectId, int? cursor}) async {
@@ -61,7 +39,7 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     );
   }
 
-  Future<void> createInvoice({required CreateInvoiceRequest invoice}) async {
+  Future<void> createInvoice({required Invoice invoice}) async {
     final result = await _repository.createInvoice(invoice: invoice);
 
     result.fold((data) {}, (error) {
@@ -71,8 +49,11 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     await loadInvoices();
   }
 
-  Future<void> updateInvoice(CreateInvoiceRequest invoice, String invoiceId) async {
-    final result = await _repository.updateInvoice(invoiceId: invoiceId, invoice: invoice);
+  Future<void> updateInvoice(Invoice invoice, String invoiceId) async {
+    final result = await _repository.updateInvoice(
+      invoiceId: invoiceId,
+      invoice: invoice,
+    );
 
     result.fold((data) {}, (error) {
       logger.e('Error creating invoice: ${error.message}');

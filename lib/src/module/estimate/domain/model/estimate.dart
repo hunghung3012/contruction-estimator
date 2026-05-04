@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import '../../../../common/extension/double_x.dart';
 
 class Estimate {
@@ -155,14 +156,25 @@ class EstimateCategory {
   };
 }
 
-class EstimateItem {
-  String? id;
-  String? name;
-  String? unit;
-  int? quantity;
-  double? price;
+class EstimateItem extends Equatable {
+  final String? id;
+  final String? name;
+  final String? unit;
+  final int? quantity;
+  final double? price;
+  final String? measurementUnit;
 
-  EstimateItem({this.id, this.name, this.unit, this.quantity, this.price});
+  const EstimateItem({
+    this.id,
+    this.name,
+    this.unit,
+    this.quantity,
+    this.price,
+    this.measurementUnit,
+  });
+
+  @override
+  List<Object?> get props => [id, name, unit, quantity, price, measurementUnit];
 
   EstimateItem copyWith({
     String? id,
@@ -170,6 +182,7 @@ class EstimateItem {
     String? unit,
     int? quantity,
     double? price,
+    String? measurementUnit,
   }) {
     return EstimateItem(
       id: id ?? this.id,
@@ -177,6 +190,7 @@ class EstimateItem {
       unit: unit ?? this.unit,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
+      measurementUnit: measurementUnit ?? this.measurementUnit,
     );
   }
 
@@ -186,6 +200,7 @@ class EstimateItem {
     unit: json["unit"],
     quantity: json["quantity"],
     price: (json["price"] as num?)?.toDouble() ?? 0,
+    measurementUnit: json["measurementUnit"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -194,5 +209,6 @@ class EstimateItem {
     "unit": unit,
     "quantity": quantity,
     "price": price,
+    "measurementUnit": measurementUnit,
   };
 }

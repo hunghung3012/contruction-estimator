@@ -1,13 +1,12 @@
-import 'package:construction_estimator/src/core/datasource/local/shared_prederences/storage.dart';
-import 'package:construction_estimator/src/core/datasource/remote/base/api_error.dart';
-import 'package:construction_estimator/src/core/datasource/remote/base/api_response.dart';
-import 'package:construction_estimator/src/core/datasource/remote/module/api_module.dart';
-import 'package:construction_estimator/src/module/invoice/data/request/invoice_request.dart';
-import 'package:construction_estimator/src/module/invoice/data/service/invoice_service.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:result_dart/result_dart.dart';
 
+import '../../../../core/datasource/local/shared_prederences/storage.dart';
+import '../../../../core/datasource/remote/base/api_error.dart';
+import '../../../../core/datasource/remote/base/api_response.dart';
+import '../../../../core/datasource/remote/module/api_module.dart';
+import '../../data/service/invoice_service.dart';
 import '../model/invoice.dart';
 
 @injectable
@@ -16,8 +15,8 @@ class InvoiceRepository {
 
   InvoiceRepository(this._api);
 
-  Future<Result<Invoice, ApiError>> createInvoice({
-    required CreateInvoiceRequest invoice,
+  Future<Result<StatusApiResponse, ApiError>> createInvoice({
+    required Invoice? invoice,
     CancelToken? token,
   }) async {
     final result = _api.createInvoice(AppStorage.userId ?? '', invoice, token);
@@ -32,7 +31,7 @@ class InvoiceRepository {
   }) async {
     final result = _api.getInvoices(
       AppStorage.userId ?? '',
-      projectId ?? '',
+      projectId,
       nextCursor,
       token,
     );
@@ -40,7 +39,7 @@ class InvoiceRepository {
     return result.tryGet((response) => response);
   }
 
-  Future<Result<Invoice, ApiError>> deleteInvoice({
+  Future<Result<StatusApiResponse, ApiError>> deleteInvoice({
     required String invoiceId,
     CancelToken? token,
   }) async {
@@ -53,7 +52,7 @@ class InvoiceRepository {
     return result.tryGet((response) => response);
   }
 
-  Future<Result<Invoice, ApiError>> deleteAllInvoices({
+  Future<Result<StatusApiResponse, ApiError>> deleteAllInvoices({
     CancelToken? token,
   }) async {
     final result = _api.deleteAllInvoices(AppStorage.userId ?? '', token);
@@ -61,9 +60,9 @@ class InvoiceRepository {
     return result.tryGet((response) => response);
   }
 
-  Future<Result<Invoice, ApiError>> updateInvoice({
+  Future<Result<StatusApiResponse, ApiError>> updateInvoice({
     required String invoiceId,
-    required CreateInvoiceRequest invoice,
+    required Invoice? invoice,
     CancelToken? token,
   }) async {
     final result = _api.updateInvoice(

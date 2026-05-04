@@ -6,8 +6,13 @@ import '../../module/chat/presentation/chatting_page.dart';
 import '../../module/estimate/domain/model/estimate.dart';
 import '../../module/estimate/presentation/estimate_detail_page.dart';
 import '../../module/home/home_page.dart';
+import '../../module/invoice/domain/model/invoice.dart';
 import '../../module/invoice/presentation/invoice_detail_page.dart';
 import '../../module/splash/splash_page.dart';
+import '../../module/term/presentation/term_page.dart';
+import '../../module/proposal/domain/model/proposal.dart';
+import '../../module/proposal/presentation/proposal_detail_page.dart';
+import '../datasource/local/hive/term_hive_repository.dart';
 
 part 'app_router.gr.dart';
 
@@ -23,5 +28,8 @@ class AppRouter extends RootStackRouter {
 
     AutoRoute(page: ChattingRoute.page),
     AutoRoute(page: EstimateDetailRoute.page),
+
+    AutoRoute(page: TermRoute.page),
+    AutoRoute(page: ProposalDetailRoute.page),
   ];
 }

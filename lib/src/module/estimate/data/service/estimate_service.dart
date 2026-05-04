@@ -31,7 +31,7 @@ abstract class EstimateService {
     @CancelRequest() CancelToken? cancelToken,
   );
 
-  @POST(ApiEndpoint.convertEstimateToProposal)
+  @POST(ApiEndpoint.createProposalFromEstimate)
   Future<SingleApiResponse<Proposal>> convertToProposal(
     @Path('userId') String userId,
     @Path('estimateId') String estimateId,

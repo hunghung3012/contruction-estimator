@@ -49,15 +49,15 @@ abstract class SingleApiResponse<T> with _$SingleApiResponse<T> {
   ) => _$SingleApiResponseFromJson(json, fromJsonT);
 }
 
-  @Freezed(genericArgumentFactories: true)
-  abstract class ListApiResponse<T> with _$ListApiResponse<T> {
-    const factory ListApiResponse(List<T> data) = _ListApiResponse;
+@Freezed(genericArgumentFactories: true)
+abstract class ListApiResponse<T> with _$ListApiResponse<T> {
+  const factory ListApiResponse(List<T> data) = _ListApiResponse;
 
-    factory ListApiResponse.fromJson(
-      Map<String, dynamic> json,
-      T Function(Object?) fromJsonT,
-    ) => _$ListApiResponseFromJson(json, fromJsonT);
-  }
+  factory ListApiResponse.fromJson(
+    Map<String, dynamic> json,
+    T Function(Object?) fromJsonT,
+  ) => _$ListApiResponseFromJson(json, fromJsonT);
+}
 
 @Freezed(genericArgumentFactories: true)
 abstract class PaginationResponse with _$PaginationResponse {

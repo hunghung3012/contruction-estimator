@@ -12,6 +12,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'src/common/utils/app_environment.dart';
 import 'src/common/utils/getit_utils.dart';
 import 'src/core/app/app_widget.dart';
+import 'src/core/datasource/local/hive/hive_service.dart';
 import 'src/core/datasource/local/shared_prederences/storage.dart';
 import 'src/core/only_one_point_widget.dart';
 
@@ -27,6 +28,7 @@ void main() {
       await AppEnvironment.setup();
       await AppStorage.setup();
       await GetItUtils.setup();
+      await getIt<HiveService>().setup();
 
       await initializeDateFormatting();
 

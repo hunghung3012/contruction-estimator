@@ -76,4 +76,17 @@ class AppStorage {
     map.remove(id);
     return _set(AppStorageKeys.statusColors, json.encode(map));
   }
+
+  static String? get companyName => _get(AppStorageKeys.companyName);
+  static Future setCompanyName(String? val) =>
+      _set(AppStorageKeys.companyName, val);
+
+  static String? get email => _get(AppStorageKeys.email);
+  static Future setEmail(String? val) => _set(AppStorageKeys.email, val);
+
+  static String? get phone => _get(AppStorageKeys.phone);
+  static Future setPhone(String? val) => _set(AppStorageKeys.phone, val);
+
+  static String? get address => _get(AppStorageKeys.address);
+  static Future setAddress(String? val) => _set(AppStorageKeys.address, val);
 }
