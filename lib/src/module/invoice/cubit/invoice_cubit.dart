@@ -4,60 +4,61 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../common/utils/logger.dart';
 import '../domain/model/invoice.dart';
+import '../domain/repository/invoice_repository.dart';
 
 part 'invoice_state.dart';
+
 part 'invoice_cubit.freezed.dart';
 
 @lazySingleton
 class InvoiceCubit extends Cubit<InvoiceState> {
-  StreamSubscription<List<Invoice>>? _sub;
+  final InvoiceRepository _repository;
 
-  InvoiceCubit() : super(InvoiceState.initial([], false, null)) {
+  InvoiceCubit(this._repository)
+    : super(InvoiceState.initial([], false, null)) {
     loadInvoices();
-    _listenInvoices();
   }
 
-  void _listenInvoices() {
-    // _sub = _repository.watchAllInvoices().listen((invoices) {
-    //   emit(state.copyWith(invoices: invoices));
-    // });
-  }
-
-  @override
-  Future<void> close() async {
-    await _sub?.cancel();
-    return super.close();
-  }
-
-  Future<void> loadInvoices() async {
+  Future<void> loadInvoices({String? projectId, int? cursor}) async {
     emit(state.copyWith(isLoading: true));
 
-    // final invoices = await _repository.getAll();
+    final result = await _repository.getInvoices(
+      projectId: projectId,
+      nextCursor: cursor,
+    );
 
-    // emit(state.copyWith(invoices: invoices, isLoading: false));
+    result.fold(
+      (data) {
+        emit(state.copyWith(isLoading: false, invoices: data.items));
+      },
+      (error) {
+        emit(state.copyWith(isLoading: false));
+      },
+    );
   }
 
-  Future<void> createInvoice() async {
-    // final invoice = Invoice(
-    //   const Uuid().v4(),
-    //   null,
-    //   null,
-    //   'New Invoice',
-    //   null,
-    //   'INV-${DateTime.now().millisecondsSinceEpoch}',
-    //   0,
-    //   0,
-    //   DateTime.now(),
-    //   DateTime.now(),
-    // );
+  Future<void> createInvoice({required Invoice invoice}) async {
+    final result = await _repository.createInvoice(invoice: invoice);
 
-    // await _repository.createInvoice(invoice);
+    result.fold((data) {}, (error) {
+      logger.e('Error creating invoice: ${error.message}');
+    });
+
     await loadInvoices();
   }
 
-  Future<void> updateInvoice(Invoice invoice) async {
-    // await _repository.updateInvoice(invoice);
+  Future<void> updateInvoice(Invoice invoice, String invoiceId) async {
+    final result = await _repository.updateInvoice(
+      invoiceId: invoiceId,
+      invoice: invoice,
+    );
+
+    result.fold((data) {}, (error) {
+      logger.e('Error creating invoice: ${error.message}');
+    });
+
     await loadInvoices();
   }
 
@@ -66,7 +67,19 @@ class InvoiceCubit extends Cubit<InvoiceState> {
   // ========================
 
   Future<void> deleteInvoice(String invoiceId) async {
-    // await _repository.deleteInvoice(invoiceId);
+    final result = await _repository.deleteInvoice(invoiceId: invoiceId);
+    result.fold((data) {}, (error) {
+      logger.e('Error deleting invoice: ${error.message}');
+    });
+    await loadInvoices();
+  }
+
+  Future<void> deleteAllInvoices() async {
+    final result = await _repository.deleteAllInvoices();
+
+    result.fold((data) {}, (error) {
+      logger.e('Error deleting all invoices: ${error.message}');
+    });
     await loadInvoices();
   }
 }

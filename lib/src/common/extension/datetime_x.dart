@@ -1,7 +1,8 @@
 import 'package:intl/intl.dart';
 
-extension DatetimeX on DateTime {
+extension DateTimeX on DateTime? {
   String get localized {
-    return DateFormat.yMMMd().add_jm().format(this);
+    if (this == null) return '';
+    return DateFormat.yMMMd().format(this!);
   }
 }

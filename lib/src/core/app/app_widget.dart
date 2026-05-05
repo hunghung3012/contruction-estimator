@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -36,7 +37,7 @@ class AppWidget extends StatelessWidget {
             context,
           ).copyWith(textScaler: TextScaler.noScaling),
           child: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light.copyWith(
+            value: SystemUiOverlayStyle.dark.copyWith(
               statusBarColor: Colors.transparent,
               statusBarIconBrightness: Brightness.light,
             ),
@@ -52,6 +53,7 @@ class AppWidget extends StatelessWidget {
                       locale: state.language.locale,
                       localizationsDelegates: const [
                         S.delegate,
+                        FlutterQuillLocalizations.delegate,
                         GlobalMaterialLocalizations.delegate,
                         GlobalWidgetsLocalizations.delegate,
                         GlobalCupertinoLocalizations.delegate,

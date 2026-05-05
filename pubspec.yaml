@@ -20,6 +20,13 @@ dependencies:
   lottie: ^3.3.1
   shimmer: ^3.0.0
   pull_down_button: ^0.10.2
+  dotted_border: ^3.1.0
+  
+  #markdown
+  flutter_quill: ^11.5.0
+  markdown_quill: ^4.3.0
+  markdown: ^7.3.1
+  flutter_markdown: ^0.7.7+1
 
   #camera
   image_picker: ^1.1.2
@@ -30,8 +37,8 @@ dependencies:
   #local storage
   shared_preferences: ^2.2.2
   rx_shared_preferences: ^3.1.0
-  isar_community: 3.3.0
-  isar_community_flutter_libs: 3.3.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
   #state management
   bloc: ^9.0.0

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../generated/colors.gen.dart';
 import 'default_text_theme.dart';
@@ -48,6 +49,10 @@ class AppTheme {
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: false,
+        systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
       ),
 
       // ========================

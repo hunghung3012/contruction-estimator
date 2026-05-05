@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/utils/getit_utils.dart';
-import '../client/presentation/client_page.dart';
-import '../invoice/presentation/invoice_page.dart';
-import '../project/presentation/project_page.dart';
-import '../proposal/presentation/proposal_page.dart';
+import '../client/presentation/client_tab.dart';
+import '../invoice/presentation/invoice_tab.dart';
+import '../project/presentation/project_tab/project_tab.dart';
+import '../proposal/presentation/proposal_tab/proposal_tab.dart';
 import 'application/home_cubit.dart';
 
 @RoutePage()
@@ -37,11 +37,11 @@ class _HomeBodyState extends State<HomeBody> {
         return Scaffold(
           body: IndexedStack(
             index: state.currentIndex,
-            children: [
-              const ProjectPage(),
-              const InvoicePage(),
-              const ProposalPage(),
-              const ClientPage(),
+            children: const [
+              ProjectTab(),
+              InvoiceTab(),
+              ProposalTab(),
+              ClientTab(),
             ],
           ),
 
@@ -49,7 +49,6 @@ class _HomeBodyState extends State<HomeBody> {
             currentIndex: state.currentIndex,
             onTap: (index) => context.read<HomeCubit>().setTabIndex(index),
             type: BottomNavigationBarType.fixed,
-            // backgroundColor: Colors.white,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.work),
