@@ -7,6 +7,8 @@ import 'package:injectable/injectable.dart';
 import '../../../common/utils/logger.dart';
 import '../../../core/datasource/local/hive/term_hive_repository.dart';
 import '../../estimate/domain/model/estimate.dart';
+import '../../client/domain/model/client.dart';
+import '../../client/cubit/client_cubit.dart';
 import '../domain/model/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,18 +72,16 @@ class InvoiceDetailCubit extends Cubit<InvoiceDetailState> {
         invoice: invoice,
         initialInvoice: invoice,
         currentTerm: initialTerm,
+        selectedClient: getIt<ClientCubit>().getClientById(invoice.clientId),
       ),
     );
   }
 
-  Future<void> updateInvoice() async {
+  Future<void> updateInvoice(Invoice? invoice) async {
     emit(state.copyWith(isLoading: true));
-    final invoice = state.invoice?.copyWith(
-      termsAndConditions: state.currentTerm?.markdownContent,
-    );
     final result = await _repository.updateInvoice(
       invoice: invoice,
-      invoiceId: state.invoice?.id ?? '',
+      invoiceId: invoice?.id ?? '',
     );
     result.fold(
       (success) {
@@ -96,17 +96,30 @@ class InvoiceDetailCubit extends Cubit<InvoiceDetailState> {
         getIt<InvoiceCubit>().loadInvoices();
       },
       (error) {
-        logger.e('Error creating invoice: ${error.message}');
+        logger.e('Error updating invoice: ${error.message}');
         emit(state.copyWith(isLoading: false));
       },
     );
   }
 
-  Future<void> createInvoice() async {
-    emit(state.copyWith(isLoading: true));
+  Future<void> saveInvoice() async {
     final invoice = state.invoice?.copyWith(
       termsAndConditions: state.currentTerm?.markdownContent,
+      items: state.invoice?.items
+          ?.map((e) => e.copyWith(unit: state.currencyUnit))
+          .toList(),
     );
+    if (invoice == null) return;
+
+    if (invoice.id != null) {
+      await updateInvoice(invoice);
+    } else {
+      await createInvoice(invoice);
+    }
+  }
+
+  Future<void> createInvoice(Invoice? invoice) async {
+    emit(state.copyWith(isLoading: true));
     final result = await _repository.createInvoice(invoice: invoice);
     result.fold(
       (success) {
@@ -265,5 +278,15 @@ class InvoiceDetailCubit extends Cubit<InvoiceDetailState> {
   void onChangeTerm(TermModel? term) {
     if (state.currentTerm?.id == term?.id) return;
     emit(state.copyWith(currentTerm: term));
+  }
+
+  void onChangeClient(Client? client) {
+    if (state.selectedClient?.id == client?.id) return;
+    emit(
+      state.copyWith(
+        selectedClient: client,
+        invoice: state.invoice?.copyWith(clientId: client?.id),
+      ),
+    );
   }
 }

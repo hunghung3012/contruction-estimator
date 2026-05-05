@@ -14,6 +14,7 @@ class ApiEndpoint {
 
   //Projects
   static const String projects = '/users/{userId}/projects';
+  static const String estimatesFromProject = '/projects/{projectId}/estimates';
 
   //Projects status
   static const String projectStatuses = '/users/{userId}/project-statuses';

@@ -28,6 +28,14 @@ class ClientCubit extends Cubit<ClientState> {
     );
   }
 
+  Client? getClientById(String? id) {
+    if (id == null || id.isEmpty) return null;
+    return (state.clients ?? []).firstWhere(
+      (c) => c.id == id,
+      orElse: () => Client(id: id),
+    );
+  }
+
   void create(Client client) async {
     emit(ClientState(isLoading: true));
     final result = await _clientRepository.create(client);

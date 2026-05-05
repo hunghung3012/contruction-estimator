@@ -65,19 +65,19 @@ extension _InvoiceDetailTabExtension on _InvoiceDetailBodyState {
           noteController: _noteController,
           quillController: _quillController,
         ),
-        SizedBox(height: 30.h),
-        AppButton(
-          title: context.s.save,
-          isButtonDisabled: !state.isEditting,
-          isLoading: state.isLoading,
-          onPressed: () async {
-            if (widget.invoice.isNull) {
-              await context.read<InvoiceDetailCubit>().createInvoice();
-            } else {
-              await context.read<InvoiceDetailCubit>().updateInvoice();
-            }
-          },
-        ),
+        // SizedBox(height: 30.h),
+        // AppButton(
+        //   title: context.s.save,
+        //   isButtonDisabled: !state.isEditting,
+        //   isLoading: state.isLoading,
+        //   onPressed: () async {
+        //     if (widget.invoice.isNull) {
+        //       await context.read<InvoiceDetailCubit>().createInvoice();
+        //     } else {
+        //       await context.read<InvoiceDetailCubit>().updateInvoice();
+        //     }
+        //   },
+        // ),
         SizedBox(height: 24.h),
         AppButton(
           title: context.s.send,

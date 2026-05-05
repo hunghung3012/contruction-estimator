@@ -1,16 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:construction_estimator/src/core/app/app_router.dart';
 import 'package:construction_estimator/src/module/proposal/cubit/proposal_cubit.dart';
-import 'package:construction_estimator/src/module/proposal/presentation/widgets/proposal_card.dart';
+import 'package:construction_estimator/src/module/proposal/presentation/proposal_tab/proposal_tab_widgets/proposal_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../generated/colors.gen.dart';
-import '../../../common/extension/context_x.dart';
-import '../../../common/utils/getit_utils.dart';
-import '../../../common/widgets/app_button.dart';
-import '../../../common/widgets/app_text.dart';
+import '../../../../../generated/colors.gen.dart';
+import '../../../../common/extension/context_x.dart';
+import '../../../../common/utils/getit_utils.dart';
+import '../../../../common/widgets/app_button.dart';
+import '../../../../common/widgets/app_text.dart';
 
 class ProposalTab extends StatelessWidget {
   const ProposalTab({super.key});
@@ -67,7 +67,9 @@ class ProposalBody extends StatelessWidget {
           if (proposals.isEmpty) {
             return Center(
               child: AppText(
-                context.s.no_terms_yet, // Or a better "no proposals" key if exists
+                context
+                    .s
+                    .no_terms_yet, // Or a better "no proposals" key if exists
                 textColor: ColorName.gray99,
               ),
             );
@@ -84,7 +86,9 @@ class ProposalBody extends StatelessWidget {
                   context.router.push(ProposalDetailRoute(proposal: proposal));
                 },
                 onDelete: () {
-                  context.read<ProposalCubit>().deleteProposal(proposal.id ?? '');
+                  context.read<ProposalCubit>().deleteProposal(
+                    proposal.id ?? '',
+                  );
                 },
               );
             },

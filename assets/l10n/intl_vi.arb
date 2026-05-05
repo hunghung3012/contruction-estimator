@@ -171,5 +171,13 @@
   "enter_warranty": "Nhập chi tiết bảo hành...",
   "enter_exclusion": "Nhập các loại trừ...",
   "enter_payment_term": "Nhập điều khoản thanh toán...",
-  "enter_payment_info": "Nhập thông tin thanh toán..."
+  "enter_payment_info": "Nhập thông tin thanh toán...",
+  "prepared_for": "Chuẩn bị cho",
+  "project": "Dự án",
+  "scope_of_work": "Phạm vi công việc",
+  "add_scope_of_work": "Thêm phạm vi công việc",
+  "edit_scope_of_work": "Sửa phạm vi công việc",
+  "select_client": "Chọn khách hàng",
+  "search": "Tìm kiếm",
+  "no_clients_found": "Không tìm thấy khách hàng phù hợp"
 }

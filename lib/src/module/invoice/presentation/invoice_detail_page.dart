@@ -27,6 +27,8 @@ import '../../../core/datasource/local/shared_prederences/storage.dart';
 import '../../../common/utils/getit_utils.dart';
 import '../../../core/datasource/local/hive/term_hive_repository.dart';
 import '../../../core/app/app_router.dart';
+import '../../client/cubit/client_cubit.dart';
+import '../../client/domain/model/client.dart';
 import '../../estimate/domain/model/estimate.dart';
 import '../cubit/invoice_cubit.dart';
 import '../cubit/invoice_detail_cubit.dart';
@@ -43,6 +45,7 @@ part 'widgets/price_card.dart';
 part 'widgets/payment_widget.dart';
 part 'widgets/term_widget.dart';
 part 'widgets/currency_textfield.dart';
+part 'widgets/client_selection_bottom_sheet.dart';
 
 part 'invoice_detail_client_tab.dart';
 part 'invoice_detail_tab.dart';

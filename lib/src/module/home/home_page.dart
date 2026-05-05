@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/utils/getit_utils.dart';
 import '../client/presentation/client_tab.dart';
 import '../invoice/presentation/invoice_tab.dart';
-import '../project/presentation/project_tab.dart';
-import '../proposal/presentation/proposal_tab.dart';
+import '../project/presentation/project_tab/project_tab.dart';
+import '../proposal/presentation/proposal_tab/proposal_tab.dart';
 import 'application/home_cubit.dart';
 
 @RoutePage()

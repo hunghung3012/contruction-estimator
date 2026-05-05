@@ -6,14 +6,14 @@ class _InvoiceAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: BlocBuilder<InvoiceDetailCubit, InvoiceDetailState>(
-          builder: (context, state) {
-            return AppCircleButton(
+    return BlocBuilder<InvoiceDetailCubit, InvoiceDetailState>(
+      builder: (context, state) {
+        return AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: AppCircleButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
               onTap: () {
                 if (state.isEditting) {
@@ -32,49 +32,62 @@ class _InvoiceAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context.router.pop();
                 }
               },
-            );
-          },
-        ),
-      ),
-      leadingWidth: 56,
-      title: AppText(
-        context.s.invoice,
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-      ),
-      centerTitle: true,
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: PullDownButton(
-            itemBuilder: (context) => [
-              PullDownMenuItem(
-                onTap: () {
-                  //TODO: Export to PDF
-                },
-                title: context.s.export_to_pdf,
-                icon: Icons.picture_as_pdf_rounded,
-              ),
-              if (initialInvoice.isNotNull)
-                PullDownMenuItem(
-                  onTap: () async {
-                    await getIt<InvoiceCubit>().deleteInvoice(
-                      initialInvoice?.id ?? '',
-                    );
-                    if (context.mounted) context.router.pop();
-                  },
-                  title: context.s.delete,
-                  isDestructive: true,
-                  icon: CupertinoIcons.delete,
-                ),
-            ],
-            buttonBuilder: (context, showMenu) => AppCircleButton(
-              icon: const Icon(Icons.more_vert, color: Colors.black, size: 20),
-              onTap: showMenu,
             ),
           ),
-        ),
-      ],
+          leadingWidth: 56,
+          title: AppText(
+            context.s.invoice,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+          centerTitle: true,
+          actions: [
+            AppText(
+              context.s.save,
+              fontWeight: FontWeight.w500,
+              textColor: (state.isEditting && !state.isLoading)
+                  ? ColorName.primary
+                  : ColorName.gray55,
+              ignorePointer: !(state.isEditting && !state.isLoading),
+              onTap: () => context.read<InvoiceDetailCubit>().saveInvoice(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0, left: 16.0),
+              child: PullDownButton(
+                itemBuilder: (context) => [
+                  PullDownMenuItem(
+                    onTap: () {
+                      //TODO: Export to PDF
+                    },
+                    title: context.s.export_to_pdf,
+                    icon: Icons.picture_as_pdf_rounded,
+                  ),
+                  if (initialInvoice.isNotNull)
+                    PullDownMenuItem(
+                      onTap: () async {
+                        await getIt<InvoiceCubit>().deleteInvoice(
+                          initialInvoice?.id ?? '',
+                        );
+                        if (context.mounted) context.router.pop();
+                      },
+                      title: context.s.delete,
+                      isDestructive: true,
+                      icon: CupertinoIcons.delete,
+                    ),
+                ],
+                buttonBuilder: (context, showMenu) => AppCircleButton(
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  onTap: showMenu,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

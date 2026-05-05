@@ -1,4 +1,4 @@
-part of '../proposal_detail_page.dart';
+part of '../../proposal_detail_page.dart';
 
 class _CompanyCard extends StatelessWidget {
   final TextEditingController companyNameController;

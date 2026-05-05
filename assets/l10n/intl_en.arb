@@ -171,5 +171,13 @@
   "enter_warranty": "Enter warranty details...",
   "enter_exclusion": "Enter exclusions...",
   "enter_payment_term": "Enter payment terms...",
-  "enter_payment_info": "Enter payment information..."
+  "enter_payment_info": "Enter payment information...",
+  "prepared_for": "Prepared for",
+  "project": "Project",
+  "scope_of_work": "Scope of work",
+  "add_scope_of_work": "Add Scope of Work",
+  "edit_scope_of_work": "Edit Scope of Work",
+  "select_client": "Select Client",
+  "search": "Search",
+  "no_clients_found": "No clients found"
 }

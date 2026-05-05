@@ -2,7 +2,6 @@ part of '../proposal_detail_page.dart';
 
 extension _ProposalEditTabExtension on _ProposalDetailBodyState {
   Widget _buildEditTab(ProposalDetailState state) {
-    final s = context.s;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -22,7 +21,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         // Title
         AppTextField(
           controller: _titleController,
-          hintText: s.untitled_template,
+          hintText: context.s.untitled_template,
           fontSize: 20,
           fontWeight: FontWeight.w600,
           textColor: Colors.grey.shade600,
@@ -32,102 +31,26 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         SizedBox(height: 20.h),
 
         // Intro
-        _buildSectionTitle(s.introduction),
-        _buildRichTextEditor(_introQuillController, s.enter_introduction),
+        _buildSectionTitle(context.s.introduction),
+        _buildRichTextEditor(
+          _introQuillController,
+          context.s.enter_introduction,
+        ),
         SizedBox(height: 20.h),
 
         // Overview
-        _buildSectionTitle(s.overview),
-        _buildRichTextEditor(_overviewQuillController, s.enter_overview),
+        _buildSectionTitle(context.s.overview),
+        _buildRichTextEditor(
+          _overviewQuillController,
+          context.s.enter_overview,
+        ),
         SizedBox(height: 20.h),
 
         // Scope of Work
-        _buildSectionTitle('Phạm vi công việc (Scope of Work)'),
+        _buildSectionTitle(context.s.scope_of_work),
         ScopeOfWorkWidget(scopes: state.proposal?.scopeOfWork),
-        SizedBox(height: 20.h),
 
-        // Dates
-        Row(
-          children: [
-            Expanded(
-              child: _buildDatePicker(
-                label: s.start_date,
-                date: state.proposal?.startDate,
-                onChanged: (date) =>
-                    context.read<ProposalDetailCubit>().onChangeStartDate(date),
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: _buildDatePicker(
-                label: s.end_date,
-                date: state.proposal?.endDate,
-                onChanged: (date) =>
-                    context.read<ProposalDetailCubit>().onChangeEndDate(date),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 20.h),
-
-        // Client Message
-        _buildSectionTitle(s.client_message),
-        AppTextField(
-          controller: _clientMessageController,
-          hintText: s.enter_client_message,
-          maxLines: 3,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
-        // Warranty & Exclusion
-        _buildSectionTitle(s.warranty),
-        AppTextField(
-          controller: _warrantyController,
-          hintText: s.enter_warranty,
-          maxLines: 2,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
-        _buildSectionTitle(s.exclusion),
-        AppTextField(
-          controller: _exclusionController,
-          hintText: s.enter_exclusion,
-          maxLines: 2,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
-        // Payment
-        _buildSectionTitle(s.payment_term),
-        AppTextField(
-          controller: _paymentTermController,
-          hintText: s.enter_payment_term,
-          maxLines: 2,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
-        _buildSectionTitle(s.payment_info),
-        AppTextField(
-          controller: _paymentInfoController,
-          hintText: s.enter_payment_info,
-          maxLines: 2,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
-        // Note
-        _buildSectionTitle(s.note),
-        AppTextField(
-          controller: _noteController,
-          hintText: s.note,
-          maxLines: 2,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        SizedBox(height: 20.h),
-
+        SizedBox(height: 12.h),
         // Financial Summary
         _ProposalPriceCard(
           subtotal: state.proposal?.subtotal ?? 0,
@@ -138,16 +61,96 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
 
         SizedBox(height: 30.h),
 
-        // Actions
-        AppButton(
-          title: s.save,
-          isButtonDisabled: !state.isEditing,
-          isLoading: state.isLoading,
-          onPressed: () => context.read<ProposalDetailCubit>().saveProposal(),
+        // Dates
+        Row(
+          children: [
+            Expanded(
+              child: _buildDatePicker(
+                label: context.s.start_date,
+                date: state.proposal?.startDate,
+                onChanged: (date) =>
+                    context.read<ProposalDetailCubit>().onChangeStartDate(date),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: _buildDatePicker(
+                label: context.s.end_date,
+                date: state.proposal?.endDate,
+                onChanged: (date) =>
+                    context.read<ProposalDetailCubit>().onChangeEndDate(date),
+              ),
+            ),
+          ],
         ),
+        SizedBox(height: 20.h),
+
+        // // Client Message
+        // _buildSectionTitle(context.s.client_message),
+        // AppTextField(
+        //   controller: _clientMessageController,
+        //   hintText: context.s.enter_client_message,
+        //   maxLines: 3,
+        //   borderRadius: BorderRadius.circular(8.r),
+        // ),
+        // SizedBox(height: 20.h),
+
+        // Payment term
+        _buildSectionTitle(context.s.payment_term),
+        AppTextField(
+          controller: _paymentTermController,
+          hintText: context.s.enter_payment_term,
+          maxLines: 2,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        SizedBox(height: 20.h),
+
+        //Terms and Condition
+        _TermWidget(state.currentTerm),
+        SizedBox(height: 20.h),
+
+        // Warranty
+        _buildSectionTitle(context.s.warranty),
+        AppTextField(
+          controller: _warrantyController,
+          hintText: context.s.enter_warranty,
+          maxLines: 2,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        SizedBox(height: 20.h),
+        //Exclusion
+        _buildSectionTitle(context.s.exclusion),
+        AppTextField(
+          controller: _exclusionController,
+          hintText: context.s.enter_exclusion,
+          maxLines: 2,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        SizedBox(height: 20.h),
+
+        _buildSectionTitle(context.s.payment_info),
+        AppTextField(
+          controller: _paymentInfoController,
+          hintText: context.s.enter_payment_info,
+          maxLines: 2,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        SizedBox(height: 20.h),
+
+        // Note
+        _buildSectionTitle(context.s.note),
+        AppTextField(
+          controller: _noteController,
+          hintText: context.s.note,
+          maxLines: 2,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        SizedBox(height: 20.h),
+
+        // Actions
         SizedBox(height: 16.h),
         AppButton(
-          title: s.send,
+          title: context.s.send,
           buttonType: ButtonType.outline,
           onPressed: () {
             // TODO: Send proposal action

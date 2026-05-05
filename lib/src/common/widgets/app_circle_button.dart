@@ -8,12 +8,14 @@ class AppCircleButton extends StatelessWidget {
   final double? padding;
   final Color? backgroundColor;
   final EdgeInsets? margin;
+  final Color? borderColor;
   const AppCircleButton({
     super.key,
     required this.icon,
     this.onTap,
     this.padding,
     this.backgroundColor,
+    this.borderColor,
     this.margin,
   });
 
@@ -27,6 +29,7 @@ class AppCircleButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor ?? ColorName.grayF0,
           shape: BoxShape.circle,
+          border: borderColor != null ? Border.all(color: borderColor!) : null,
         ),
         child: icon,
       ),

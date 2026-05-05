@@ -8,9 +8,13 @@ abstract class ProposalDetailState with _$ProposalDetailState {
     @Default(false) bool isLoading,
     @Default(ProposalTab.proposal) ProposalTab tab,
     @Default(null) File? logoFile,
+    @Default(null) TermModel? currentTerm,
+    @Default(null) Client? selectedClient,
   }) = _ProposalDetailState;
 
   const ProposalDetailState._();
 
-  bool get isEditing => proposal != initialProposal;
+  bool get isEditing =>
+      proposal != initialProposal ||
+      (currentTerm?.markdownContent ?? '') != (initialProposal?.term ?? '');
 }

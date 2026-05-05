@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../../../generated/colors.gen.dart';
-import '../../../../common/extension/context_x.dart';
-import '../../../../common/extension/datetime_x.dart';
-import '../../../../common/widgets/app_text.dart';
-import '../../domain/model/proposal.dart';
+import '../../../../../../generated/colors.gen.dart';
+import '../../../../../common/extension/context_x.dart';
+import '../../../../../common/extension/datetime_x.dart';
+import '../../../../../common/widgets/app_text.dart';
+import '../../../domain/model/proposal.dart';
 
 class ProposalCard extends StatelessWidget {
   final Proposal proposal;
@@ -92,7 +92,11 @@ class ProposalCard extends StatelessWidget {
               if (proposal.startDate != null || proposal.endDate != null)
                 Row(
                   children: [
-                    Icon(CupertinoIcons.clock, size: 16, color: Colors.grey[500]),
+                    Icon(
+                      CupertinoIcons.clock,
+                      size: 16,
+                      color: Colors.grey[500],
+                    ),
                     const SizedBox(width: 8),
                     AppText(
                       '${proposal.startDate.localized} - ${proposal.endDate.localized}',

@@ -3,7 +3,6 @@ part of '../proposal_detail_page.dart';
 extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
   Widget _buildPreviewTab(ProposalDetailState state) {
     final proposal = state.proposal;
-    final s = context.s;
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16.h),
@@ -21,111 +20,109 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          SizedBox(height: 12.h),
+          Container(
+            height: 30.h,
+            color: ColorName.primary,
+            width: double.infinity,
+          ),
+          SizedBox(height: 12.h),
           // Header (Company info)
           _buildPreviewHeader(state),
+          const Divider(thickness: 1, height: 1),
 
           // Info Section
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(
-                  (proposal?.title?.isNotEmpty == true
-                          ? proposal!.title!
-                          : s.proposal)
-                      .toUpperCase(),
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  maxLines: 2,
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 20.h),
-                _buildPreviewInfoRow(
-                  s.date,
-                  proposal?.startDate != null
-                      ? proposal!.startDate!.localized
-                      : '',
-                ),
-                if (proposal?.endDate != null)
-                  _buildPreviewInfoRow(
-                    s.end_date,
-                    proposal!.endDate!.localized,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(context.s.project, fontWeight: FontWeight.bold),
+                      AppText(
+                        proposal?.title ?? '',
+                        maxLines: 5,
+                        textAlign: TextAlign.left,
+                        fontSize: 12,
+                        enableAutoResize: true,
+                      ),
+                    ],
                   ),
-                SizedBox(height: 12.h),
-                _buildPreviewClientInfo(proposal),
+                ),
+                SizedBox(width: 40.w),
+                // _buildPreviewInfoRow(
+                //   context.s.date,
+                //   proposal?.startDate != null
+                //       ? proposal!.startDate!.localized
+                //       : '',
+                // ),
+                // if (proposal?.endDate != null)
+                //   _buildPreviewInfoRow(
+                //     context.s.end_date,
+                //     proposal!.endDate!.localized,
+                //   ),
+                Expanded(child: _buildPreviewClientInfo(state)),
               ],
             ),
           ),
-          const Divider(thickness: 1, height: 1),
 
           // Content sections
           Padding(
-            padding: EdgeInsets.all(16.r),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (proposal?.introduction?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.introduction),
-                  _buildMarkdownBody(proposal!.introduction!),
-                  SizedBox(height: 20.h),
+                  _buildMarkdownBody(proposal?.introduction ?? ''),
+                  SizedBox(height: 4.h),
                 ],
                 if (proposal?.overview?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.overview),
-                  _buildMarkdownBody(proposal!.overview!),
+                  _buildMarkdownBody(proposal?.overview ?? ''),
                   SizedBox(height: 20.h),
                 ],
                 if (proposal?.scopeOfWork != null &&
                     proposal!.scopeOfWork!.isNotEmpty) ...[
-                  _buildPreviewSectionTitle(
-                    'Phạm vi công việc (Scope of Work)',
-                  ),
-                  _buildPreviewScopeOfWork(proposal.scopeOfWork!),
-                  SizedBox(height: 20.h),
+                  _buildPreviewSectionTitle(context.s.scope_of_work),
+                  _buildPreviewScopeOfWork(proposal.scopeOfWork ?? []),
                 ],
-                if (proposal?.clientMessage?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.client_message),
-                  AppText(
-                    proposal!.clientMessage!,
-                    fontSize: 13,
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 20.h),
-                ],
+                _buildFinancialSummary(proposal),
+                SizedBox(height: 20.h),
                 if (proposal?.warranty?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.warranty),
+                  _buildPreviewSectionTitle(context.s.warranty),
                   AppText(
-                    proposal!.warranty!,
-                    fontSize: 13,
+                    proposal?.warranty ?? '',
+                    fontSize: 12,
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 20.h),
                 ],
                 if (proposal?.exclusion?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.exclusion),
+                  _buildPreviewSectionTitle(context.s.exclusion),
                   AppText(
-                    proposal!.exclusion!,
-                    fontSize: 13,
+                    proposal?.exclusion ?? '',
+                    fontSize: 12,
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 20.h),
                 ],
                 if (proposal?.paymentTerm?.isNotEmpty == true ||
                     proposal?.paymentInfor?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.payment_term),
+                  _buildPreviewSectionTitle(context.s.payment_term),
                   if (proposal?.paymentTerm?.isNotEmpty == true)
                     AppText(
-                      proposal!.paymentTerm!,
-                      fontSize: 13,
+                      proposal?.paymentTerm ?? '',
+                      fontSize: 12,
                       textAlign: TextAlign.left,
                     ),
                   if (proposal?.paymentInfor?.isNotEmpty == true)
                     Padding(
                       padding: EdgeInsets.only(top: 4.h),
                       child: AppText(
-                        proposal!.paymentInfor!,
-                        fontSize: 13,
+                        proposal?.paymentInfor ?? '',
+                        fontSize: 12,
                         textAlign: TextAlign.left,
                         fontWeight: FontWeight.w600,
                       ),
@@ -133,17 +130,30 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
                   SizedBox(height: 20.h),
                 ],
                 if (proposal?.note?.isNotEmpty == true) ...[
-                  _buildPreviewSectionTitle(s.note),
+                  _buildPreviewSectionTitle(context.s.note),
                   AppText(
-                    proposal!.note!,
-                    fontSize: 13,
+                    proposal?.note ?? '',
+                    fontSize: 12,
                     textAlign: TextAlign.left,
                     fontStyle: FontStyle.italic,
                   ),
                   SizedBox(height: 20.h),
                 ],
-                _buildFinancialSummary(proposal),
-                SizedBox(height: 20.h),
+
+                if (state.currentTerm != null &&
+                    (state.currentTerm?.markdownContent ?? '').isNotEmpty) ...[
+                  _buildPreviewSectionTitle(context.s.terms_and_conditions),
+                  _buildMarkdownBody(state.currentTerm?.markdownContent ?? ''),
+                  SizedBox(height: 20.h),
+                ] else if (proposal?.term?.isNotNullOrEmpty == true) ...[
+                  _buildPreviewSectionTitle(context.s.terms_and_conditions),
+                  AppText(
+                    proposal?.term ?? '',
+                    fontSize: 12,
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 20.h),
+                ],
               ],
             ),
           ),
@@ -203,112 +213,114 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
     final s = context.s;
 
     return Container(
-      color: ColorName.primary,
+      // color: ColorName.primary,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          if (state.logoFile != null)
-            ClipOval(
-              child: Image.file(
-                state.logoFile!,
-                width: 80.w,
-                height: 80.w,
-                fit: BoxFit.cover,
-              ),
-            ),
-          SizedBox(width: 20.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AppText(
-                  proposal?.companyName?.isNotNullOrBlank == true
-                      ? proposal!.companyName!
-                      : s.company_name,
-                  textColor: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  textAlign: TextAlign.right,
-                  padding: EdgeInsets.only(bottom: 16.h),
-                ),
-                AppText(
-                  proposal?.address?.isNotNullOrBlank == true
-                      ? proposal!.address!
-                      : s.address,
-                  textColor: Colors.white,
-                  fontSize: 12,
-                  textAlign: TextAlign.right,
-                  padding: EdgeInsets.only(bottom: 4.h),
-                ),
-                AppText(
-                  proposal?.phone?.isNotNullOrBlank == true
-                      ? proposal!.phone!
-                      : s.phone_number,
-                  textColor: Colors.white,
-                  fontSize: 12,
-                  textAlign: TextAlign.right,
-                  padding: EdgeInsets.only(bottom: 4.h),
-                ),
-                AppText(
-                  proposal?.email?.isNotNullOrBlank == true
-                      ? proposal!.email!
-                      : s.email,
-                  textColor: Colors.white,
-                  fontSize: 12,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPreviewClientInfo(Proposal? proposal) {
-    final s = context.s;
-    return Align(
-      alignment: Alignment.centerRight,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          AppText(s.bill_to, fontWeight: FontWeight.bold),
-          SizedBox(height: 4.h),
-          AppText(s.client, fontSize: 12),
-          AppText(s.address, fontSize: 12),
-          AppText(s.phone_number, fontSize: 12),
-          AppText(s.email, fontSize: 12),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPreviewInfoRow(String title, String value) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 4.h),
-      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 100.w,
-            child: AppText(
-              title,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              textAlign: TextAlign.left,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (state.logoFile != null)
+                ClipOval(
+                  child: Image.file(
+                    state.logoFile!,
+                    width: 80.w,
+                    height: 80.w,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              SizedBox(width: 20.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    AppText(
+                      proposal?.companyName?.isNotNullOrBlank == true
+                          ? proposal!.companyName!
+                          : s.company_name,
+                      // textColor: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.right,
+                      padding: EdgeInsets.only(bottom: 16.h),
+                    ),
+                    AppText(
+                      proposal?.address?.isNotNullOrBlank == true
+                          ? proposal!.address!
+                          : s.address,
+                      // textColor: Colors.white,
+                      fontSize: 12,
+                      textAlign: TextAlign.right,
+                      padding: EdgeInsets.only(bottom: 4.h),
+                    ),
+                    AppText(
+                      proposal?.phone?.isNotNullOrBlank == true
+                          ? proposal!.phone!
+                          : s.phone_number,
+                      // textColor: Colors.white,
+                      fontSize: 12,
+                      textAlign: TextAlign.right,
+                      padding: EdgeInsets.only(bottom: 4.h),
+                    ),
+                    AppText(
+                      proposal?.email?.isNotNullOrBlank == true
+                          ? proposal!.email!
+                          : s.email,
+                      // textColor: Colors.white,
+                      fontSize: 12,
+                      textAlign: TextAlign.right,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: AppText(
-              value,
-              fontSize: 12,
-              textColor: Colors.grey[800],
-              textAlign: TextAlign.left,
-            ),
+          SizedBox(height: 30.h),
+          AppText(
+            context.s.proposal.toUpperCase(),
+            // textColor: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
+            maxLines: 1,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPreviewClientInfo(ProposalDetailState state) {
+    final client = state.selectedClient;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppText(context.s.prepared_for, fontWeight: FontWeight.bold),
+        SizedBox(height: 4.h),
+        AppText(
+          client?.name ?? context.s.client,
+          fontSize: 12,
+          textAlign: TextAlign.left,
+        ),
+        if (client?.address?.isNotNullOrEmpty == true)
+          AppText(
+            client!.address!,
+            fontSize: 12,
+            textAlign: TextAlign.left,
+          ),
+        if (client?.phone?.isNotNullOrEmpty == true)
+          AppText(
+            client!.phone!,
+            fontSize: 12,
+            textAlign: TextAlign.left,
+          ),
+        if (client?.email?.isNotNullOrEmpty == true)
+          AppText(
+            client!.email!,
+            fontSize: 12,
+            textAlign: TextAlign.left,
+          ),
+      ],
     );
   }
 
@@ -346,8 +358,8 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(title, fontWeight: FontWeight.bold, fontSize: 14),
-        Divider(color: Colors.grey.shade300, thickness: 0.5, height: 12.h),
+        AppText(title, fontWeight: FontWeight.bold, fontSize: 13),
+        Divider(color: Colors.grey.shade400, thickness: 0.5, height: 12.h),
       ],
     );
   }
@@ -358,8 +370,8 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
       child: MarkdownBody(
         data: data,
         styleSheet: MarkdownStyleSheet(
-          p: TextStyle(fontSize: 13.sp, color: Colors.grey.shade800),
-          listBullet: TextStyle(fontSize: 13.sp, color: Colors.grey.shade800),
+          p: TextStyle(fontSize: 12.sp),
+          listBullet: TextStyle(fontSize: 12.sp),
         ),
       ),
     );
@@ -373,12 +385,12 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (scope.name != null)
+              if (scope.name.isNotNull)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8.h),
+                  padding: EdgeInsets.only(bottom: 4.h),
                   child: AppText(
-                    scope.name!,
-                    fontSize: 15,
+                    scope.name,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                     textColor: ColorName.primary,
                     textAlign: TextAlign.left,
@@ -397,15 +409,21 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6.h),
+                      padding: EdgeInsets.symmetric(vertical: 4.h),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AppText(
-                            work.name ?? '',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                          Expanded(
+                            child: AppText(
+                              work.name ?? '',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              maxLines: 5,
+                              enableAutoResize: true,
+                              textAlign: TextAlign.left,
+                            ),
                           ),
+                          SizedBox(width: 16.w),
                           AppText(
                             totalWorkPrice.formattedPrice,
                             fontWeight: FontWeight.bold,
@@ -459,32 +477,12 @@ extension _ProposalPreviewTabExtension on _ProposalDetailBodyState {
                     ),
                     Divider(
                       height: 16.h,
-                      color: Colors.grey.shade100,
+                      color: Colors.grey.shade300,
                       thickness: 1,
                     ),
                   ],
                 );
               }),
-              if (scope.price != null)
-                Padding(
-                  padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppText(
-                        'Tổng ${scope.name ?? ""}:',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                      AppText(
-                        '${scope.price!.toDouble().formattedPrice} ${scope.currencyUnit ?? 'VNĐ'}',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        textColor: ColorName.primary,
-                      ),
-                    ],
-                  ),
-                ),
             ],
           );
         }),

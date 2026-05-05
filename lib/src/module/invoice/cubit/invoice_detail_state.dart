@@ -10,6 +10,7 @@ abstract class InvoiceDetailState with _$InvoiceDetailState {
     @Default(null) File? logoFile,
     @Default(null) TermModel? currentTerm,
     @Default('') String currencyUnit,
+    @Default(null) Client? selectedClient,
   }) = _InvoiceDetailState;
 
   const InvoiceDetailState._();

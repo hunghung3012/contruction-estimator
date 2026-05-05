@@ -11,7 +11,7 @@ import '../../module/invoice/presentation/invoice_detail_page.dart';
 import '../../module/splash/splash_page.dart';
 import '../../module/term/presentation/term_page.dart';
 import '../../module/proposal/domain/model/proposal.dart';
-import '../../module/proposal/presentation/proposal_detail_page.dart';
+import '../../module/proposal/presentation/proposal_detail/proposal_detail_page.dart';
 import '../datasource/local/hive/term_hive_repository.dart';
 
 part 'app_router.gr.dart';

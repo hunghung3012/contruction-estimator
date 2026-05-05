@@ -26,70 +26,62 @@ extension _InvoiceDetailClientTabExtension on _InvoiceDetailBodyState {
           Container(
             color: ColorName.primary,
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    context.watch<InvoiceDetailCubit>().state.logoFile != null
-                        ? ClipOval(
-                            child: Image.file(
-                              context
-                                  .watch<InvoiceDetailCubit>()
-                                  .state
-                                  .logoFile!,
-                              width: 80.w,
-                              height: 80.w,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    SizedBox(width: 20.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppText(
-                            (invoice?.companyName?.isNullOrEmpty ?? true)
-                                ? context.s.company_name
-                                : invoice!.companyName!,
-                            textColor: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            textAlign: TextAlign.right,
-                            padding: EdgeInsets.only(bottom: 16.h),
-                          ),
-                          AppText(
-                            (invoice?.address?.isNullOrEmpty ?? true)
-                                ? context.s.address
-                                : invoice?.address,
-                            textColor: Colors.white,
-                            fontSize: 12,
-                            textAlign: TextAlign.right,
-                            padding: EdgeInsets.only(bottom: 4.h),
-                          ),
-                          AppText(
-                            (invoice?.phone?.isNullOrEmpty ?? true)
-                                ? context.s.phone_number
-                                : invoice?.phone,
-                            textColor: Colors.white,
-                            fontSize: 12,
-                            textAlign: TextAlign.right,
-                            padding: EdgeInsets.only(bottom: 4.h),
-                          ),
-                          AppText(
-                            (invoice?.email?.isNullOrEmpty ?? true)
-                                ? context.s.email
-                                : invoice!.email!,
-                            textColor: Colors.white,
-                            fontSize: 12,
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
+                context.watch<InvoiceDetailCubit>().state.logoFile != null
+                    ? ClipOval(
+                        child: Image.file(
+                          context.watch<InvoiceDetailCubit>().state.logoFile!,
+                          width: 80.w,
+                          height: 80.w,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                SizedBox(width: 20.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        (invoice?.companyName?.isNullOrEmpty ?? true)
+                            ? context.s.company_name
+                            : invoice!.companyName!,
+                        textColor: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        textAlign: TextAlign.right,
+                        padding: EdgeInsets.only(bottom: 16.h),
                       ),
-                    ),
-                  ],
+                      AppText(
+                        (invoice?.address?.isNullOrEmpty ?? true)
+                            ? context.s.address
+                            : invoice?.address,
+                        textColor: Colors.white,
+                        fontSize: 12,
+                        textAlign: TextAlign.right,
+                        padding: EdgeInsets.only(bottom: 4.h),
+                      ),
+                      AppText(
+                        (invoice?.phone?.isNullOrEmpty ?? true)
+                            ? context.s.phone_number
+                            : invoice?.phone,
+                        textColor: Colors.white,
+                        fontSize: 12,
+                        textAlign: TextAlign.right,
+                        padding: EdgeInsets.only(bottom: 4.h),
+                      ),
+                      AppText(
+                        (invoice?.email?.isNullOrEmpty ?? true)
+                            ? context.s.email
+                            : invoice!.email!,
+                        textColor: Colors.white,
+                        fontSize: 12,
+                        textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -132,10 +124,29 @@ extension _InvoiceDetailClientTabExtension on _InvoiceDetailBodyState {
                     children: [
                       AppText(context.s.bill_to, fontWeight: FontWeight.bold),
                       SizedBox(height: 4.h),
-                      AppText(context.s.client, fontSize: 12),
-                      AppText(context.s.address, fontSize: 12),
-                      AppText(context.s.phone_number, fontSize: 12),
-                      AppText(context.s.email, fontSize: 12),
+                      AppText(
+                        state.selectedClient?.name ?? context.s.client,
+                        fontSize: 12,
+                        textAlign: TextAlign.right,
+                      ),
+                      if (state.selectedClient?.address?.isNotEmpty == true)
+                        AppText(
+                          state.selectedClient!.address!,
+                          fontSize: 12,
+                          textAlign: TextAlign.right,
+                        ),
+                      if (state.selectedClient?.phone?.isNotEmpty == true)
+                        AppText(
+                          state.selectedClient!.phone!,
+                          fontSize: 12,
+                          textAlign: TextAlign.right,
+                        ),
+                      if (state.selectedClient?.email?.isNotEmpty == true)
+                        AppText(
+                          state.selectedClient!.email!,
+                          fontSize: 12,
+                          textAlign: TextAlign.right,
+                        ),
                     ],
                   ),
                 ),

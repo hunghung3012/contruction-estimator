@@ -358,6 +358,11 @@ class _UnitSelectionBottomSheetState extends State<_UnitSelectionBottomSheet> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _categories = MeasurementData.measurements(context);
   }
 

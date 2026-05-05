@@ -1,40 +1,41 @@
+import 'package:equatable/equatable.dart';
 import '../../../estimate/domain/model/estimate.dart';
 
-class Proposal {
-  String? id;
-  String? userId;
-  String? projectId;
-  String? clientId;
+class Proposal extends Equatable {
+  final String? id;
+  final String? userId;
+  final String? projectId;
+  final String? clientId;
 
-  String? title;
-  String? clientMessage;
-  String? introduction;
-  String? overview;
-  String? companyName;
-  String? email;
-  String? phone;
-  String? address;
-  DateTime? dueDate;
+  final String? title;
+  final String? clientMessage;
+  final String? introduction;
+  final String? overview;
+  final String? companyName;
+  final String? email;
+  final String? phone;
+  final String? address;
+  final DateTime? dueDate;
 
-  List<ScopeOfWork>? scopeOfWork;
+  final List<ScopeOfWork>? scopeOfWork;
 
-  int? taxPercent;
-  int? discountPercent;
-  int? discountAmount;
+  final int? taxPercent;
+  final int? discountPercent;
+  final int? discountAmount;
 
-  DateTime? startDate;
-  DateTime? endDate;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
-  String? paymentTerm;
-  String? exclusion;
-  String? warranty;
-  String? term;
-  String? paymentInfor;
-  String? note;
+  final String? paymentTerm;
+  final String? exclusion;
+  final String? warranty;
+  final String? term;
+  final String? paymentInfor;
+  final String? note;
 
-  String? sourceEstimateId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  final String? sourceEstimateId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   String get currencyUnit {
     if (scopeOfWork != null && (scopeOfWork ?? []).isNotEmpty) {
@@ -55,7 +56,7 @@ class Proposal {
   double get taxValue => (subtotal - discountValue) * ((taxPercent ?? 0) / 100);
   double get total => subtotal - discountValue + taxValue;
 
-  Proposal({
+  const Proposal({
     this.id,
     this.userId,
     this.projectId,
@@ -85,6 +86,100 @@ class Proposal {
     this.createdAt,
     this.updatedAt,
   });
+
+  @override
+  List<Object?> get props => [
+    id,
+    userId,
+    projectId,
+    clientId,
+    title,
+    clientMessage,
+    introduction,
+    overview,
+    companyName,
+    email,
+    phone,
+    address,
+    dueDate,
+    scopeOfWork,
+    taxPercent,
+    discountPercent,
+    discountAmount,
+    startDate,
+    endDate,
+    paymentTerm,
+    exclusion,
+    warranty,
+    term,
+    paymentInfor,
+    note,
+    sourceEstimateId,
+    createdAt,
+    updatedAt,
+  ];
+
+  Proposal copyWith({
+    String? id,
+    String? userId,
+    String? projectId,
+    String? clientId,
+    String? title,
+    String? clientMessage,
+    String? introduction,
+    String? overview,
+    String? companyName,
+    String? email,
+    String? phone,
+    String? address,
+    DateTime? dueDate,
+    int? taxPercent,
+    int? discountPercent,
+    int? discountAmount,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? paymentTerm,
+    String? exclusion,
+    String? warranty,
+    String? term,
+    String? paymentInfor,
+    String? note,
+    String? sourceEstimateId,
+    List<ScopeOfWork>? scopeOfWork,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Proposal(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      projectId: projectId ?? this.projectId,
+      clientId: clientId ?? this.clientId,
+      title: title ?? this.title,
+      clientMessage: clientMessage ?? this.clientMessage,
+      introduction: introduction ?? this.introduction,
+      overview: overview ?? this.overview,
+      companyName: companyName ?? this.companyName,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+      dueDate: dueDate ?? this.dueDate,
+      taxPercent: taxPercent ?? this.taxPercent,
+      discountPercent: discountPercent ?? this.discountPercent,
+      discountAmount: discountAmount ?? this.discountAmount,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      paymentTerm: paymentTerm ?? this.paymentTerm,
+      exclusion: exclusion ?? this.exclusion,
+      warranty: warranty ?? this.warranty,
+      term: term ?? this.term,
+      paymentInfor: paymentInfor ?? this.paymentInfor,
+      note: note ?? this.note,
+      sourceEstimateId: sourceEstimateId ?? this.sourceEstimateId,
+      scopeOfWork: scopeOfWork ?? this.scopeOfWork,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
   factory Proposal.fromJson(Map<String, dynamic> json) => Proposal(
     id: json["id"],
@@ -167,14 +262,23 @@ class Proposal {
   };
 }
 
-class ScopeOfWork {
-  String? id;
-  String? name;
-  double? price;
-  String? currencyUnit;
-  List<ProposalWork>? works;
+class ScopeOfWork extends Equatable {
+  final String? id;
+  final String? name;
+  final double? price;
+  final String? currencyUnit;
+  final List<ProposalWork>? works;
 
-  ScopeOfWork({this.id, this.name, this.price, this.currencyUnit, this.works});
+  const ScopeOfWork({
+    this.id,
+    this.name,
+    this.price,
+    this.currencyUnit,
+    this.works,
+  });
+
+  @override
+  List<Object?> get props => [id, name, price, currencyUnit, works];
 
   factory ScopeOfWork.fromJson(Map<String, dynamic> json) => ScopeOfWork(
     id: json["id"],
@@ -197,14 +301,40 @@ class ScopeOfWork {
         ? null
         : List<dynamic>.from(works!.map((x) => x.toJson())),
   };
+
+  ScopeOfWork copyWith({
+    String? id,
+    String? name,
+    double? price,
+    String? currencyUnit,
+    List<ProposalWork>? works,
+  }) => ScopeOfWork(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    price: price ?? this.price,
+    currencyUnit: currencyUnit ?? this.currencyUnit,
+    works: works ?? this.works,
+  );
 }
 
-class ProposalWork {
-  String? id;
-  String? name;
-  List<EstimateItem>? items;
+class ProposalWork extends Equatable {
+  final String? id;
+  final String? name;
+  final List<EstimateItem>? items;
 
-  ProposalWork({this.id, this.name, this.items});
+  const ProposalWork({this.id, this.name, this.items});
+
+  @override
+  List<Object?> get props => [id, name, items];
+
+  int get itemCount => items?.length ?? 0;
+
+  double get price =>
+      items?.fold<double>(
+        0,
+        (prev, item) => prev + (item.price ?? 0) * (item.quantity ?? 0),
+      ) ??
+      0;
 
   factory ProposalWork.fromJson(Map<String, dynamic> json) => ProposalWork(
     id: json["id"],
@@ -214,6 +344,16 @@ class ProposalWork {
         : List<EstimateItem>.from(
             json["items"].map((x) => EstimateItem.fromJson(x)),
           ),
+  );
+
+  ProposalWork copyWith({
+    String? id,
+    String? name,
+    List<EstimateItem>? items,
+  }) => ProposalWork(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    items: items ?? this.items,
   );
 
   Map<String, dynamic> toJson() => {
