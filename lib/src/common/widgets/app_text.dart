@@ -36,6 +36,7 @@ class AppText extends StatelessWidget {
     this.ignorePointer = true,
     this.isLogin,
     this.letterSpacing = 0,
+    this.style,
   });
 
   final String? text;
@@ -64,6 +65,7 @@ class AppText extends StatelessWidget {
   final bool showSuggestLoginDialog;
   final bool? isLogin;
   final bool ignorePointer;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -82,32 +84,38 @@ class AppText extends StatelessWidget {
                         overflow: overflow,
                         maxLines: maxLines,
                         textAlign: textAlign ?? TextAlign.center,
-                        style: context.textTheme.regular.copyWith(
-                          color: textColor ?? ColorName.black07,
-                          fontWeight: fontWeight ?? FontWeight.w400,
-                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
-                          height: height?.h ?? 1,
-                          fontStyle: fontStyle,
-                          decoration: decoration,
-                          decorationColor: textColor,
-                          letterSpacing: letterSpacing,
-                        ),
+                        style:
+                            style ??
+                            context.textTheme.regular.copyWith(
+                              color: textColor ?? ColorName.black07,
+                              fontWeight: fontWeight ?? FontWeight.w400,
+                              fontSize:
+                                  fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                              height: height?.h ?? 1,
+                              fontStyle: fontStyle,
+                              decoration: decoration,
+                              decorationColor: textColor,
+                              letterSpacing: letterSpacing,
+                            ),
                       )
                     : Text(
                         text?.getTextByCasing(textCase) ?? '',
                         overflow: overflow,
                         maxLines: maxLines,
                         textAlign: textAlign ?? TextAlign.center,
-                        style: context.textTheme.regular.copyWith(
-                          color: textColor ?? ColorName.black07,
-                          fontWeight: fontWeight ?? FontWeight.w400,
-                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
-                          height: height?.h ?? 1,
-                          fontStyle: fontStyle,
-                          decoration: decoration,
-                          decorationColor: textColor,
-                          letterSpacing: letterSpacing,
-                        ),
+                        style:
+                            style ??
+                            context.textTheme.regular.copyWith(
+                              color: textColor ?? ColorName.black07,
+                              fontWeight: fontWeight ?? FontWeight.w400,
+                              fontSize:
+                                  fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                              height: height?.h ?? 1,
+                              fontStyle: fontStyle,
+                              decoration: decoration,
+                              decorationColor: textColor,
+                              letterSpacing: letterSpacing,
+                            ),
                       )
               : Row(
                   mainAxisAlignment:
@@ -122,16 +130,19 @@ class AppText extends StatelessWidget {
                         maxLines: maxLines,
                         minFontSize: minFontSize.sp,
                         textAlign: textAlign ?? TextAlign.center,
-                        style: context.textTheme.regular.copyWith(
-                          color: textColor ?? ColorName.black07,
-                          fontWeight: fontWeight ?? FontWeight.w400,
-                          fontSize: fontSize?.sp ?? UIConst.defaultFontSize.sp,
-                          height: height?.h ?? 1,
-                          fontStyle: fontStyle,
-                          decoration: decoration,
-                          decorationColor: textColor,
-                          letterSpacing: letterSpacing,
-                        ),
+                        style:
+                            style ??
+                            context.textTheme.regular.copyWith(
+                              color: textColor ?? ColorName.black07,
+                              fontWeight: fontWeight ?? FontWeight.w400,
+                              fontSize:
+                                  fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                              height: height?.h ?? 1,
+                              fontStyle: fontStyle,
+                              decoration: decoration,
+                              decorationColor: textColor,
+                              letterSpacing: letterSpacing,
+                            ),
                       )
                     else
                       Flexible(
@@ -140,17 +151,19 @@ class AppText extends StatelessWidget {
                           overflow: overflow,
                           maxLines: maxLines,
                           textAlign: textAlign ?? TextAlign.center,
-                          style: context.textTheme.regular.copyWith(
-                            color: textColor ?? ColorName.black07,
-                            fontWeight: fontWeight ?? FontWeight.w400,
-                            fontSize:
-                                fontSize?.sp ?? UIConst.defaultFontSize.sp,
-                            height: height?.h,
-                            fontStyle: fontStyle,
-                            decoration: decoration,
-                            decorationColor: textColor,
-                            letterSpacing: letterSpacing,
-                          ),
+                          style:
+                              style ??
+                              context.textTheme.regular.copyWith(
+                                color: textColor ?? ColorName.black07,
+                                fontWeight: fontWeight ?? FontWeight.w400,
+                                fontSize:
+                                    fontSize?.sp ?? UIConst.defaultFontSize.sp,
+                                height: height?.h,
+                                fontStyle: fontStyle,
+                                decoration: decoration,
+                                decorationColor: textColor,
+                                letterSpacing: letterSpacing,
+                              ),
                         ),
                       ),
                   ],

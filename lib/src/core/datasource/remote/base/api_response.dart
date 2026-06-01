@@ -33,7 +33,7 @@ class ResponseWrapper<T> extends GenericObject<T> {
 
 @Freezed(genericArgumentFactories: true)
 abstract class StatusApiResponse with _$StatusApiResponse {
-  const factory StatusApiResponse(int statusCode) = _StatusApiResponse;
+  const factory StatusApiResponse(int statusCode, String message) = _StatusApiResponse;
 
   factory StatusApiResponse.fromJson(Map<String, dynamic> json) =>
       _$StatusApiResponseFromJson(json);

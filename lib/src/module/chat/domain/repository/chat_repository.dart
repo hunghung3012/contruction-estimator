@@ -4,6 +4,7 @@ import 'package:result_dart/result_dart.dart';
 
 import '../../../../core/datasource/local/shared_prederences/storage.dart';
 import '../../../../core/datasource/remote/base/api_error.dart';
+import '../../../../core/datasource/remote/base/api_response.dart';
 import '../../../../core/datasource/remote/module/api_module.dart';
 import '../../data/request/chat_request.dart';
 import '../../data/response/chat_response.dart';
@@ -22,5 +23,19 @@ class ChatRepository {
     final request = data.copyWith(userId: AppStorage.userId);
     var result = _api.chat(request, token);
     return result.tryGet((response) => response.data);
+  }
+
+  Future<Result<PagingApiResponse<ChatResponse>, ApiError>> getChatHistory(
+    String projectId, {
+    String? cursor,
+    CancelToken? token,
+  }) async {
+    var result = _api.chatHistory(
+      projectId,
+      AppStorage.userId ?? '',
+      cursor,
+      token,
+    );
+    return result.tryGet((response) => response);
   }
 }

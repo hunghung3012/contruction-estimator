@@ -3,11 +3,13 @@ part of '../../../proposal_detail_page.dart';
 class ProposalWorkCard extends StatefulWidget {
   final String scopeId;
   final ProposalWork work;
+  final bool canEdit;
 
   const ProposalWorkCard({
     super.key,
     required this.work,
     required this.scopeId,
+    this.canEdit = true,
   });
 
   @override
@@ -42,22 +44,23 @@ class _ProposalWorkCardState extends State<ProposalWorkCard> {
               ),
               child: Row(
                 children: [
-                  InkWell(
-                    onTap: () => _showProposalAddItemBottomSheet(
-                      context,
-                      scopeId: widget.scopeId,
-                      workId: widget.work.id ?? '',
-                    ),
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 4.w),
-                      child: Icon(
-                        Icons.add_circle_outline_rounded,
-                        size: 20.sp,
-                        color: ColorName.primary,
+                  if (widget.canEdit)
+                    InkWell(
+                      onTap: () => _showProposalAddItemBottomSheet(
+                        context,
+                        scopeId: widget.scopeId,
+                        workId: widget.work.id ?? '',
+                      ),
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 4.w),
+                        child: Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 20.sp,
+                          color: ColorName.primary,
+                        ),
                       ),
                     ),
-                  ),
                   Expanded(
                     child: AppText(
                       widget.work.name ?? '',
@@ -74,44 +77,47 @@ class _ProposalWorkCardState extends State<ProposalWorkCard> {
                     fontSize: 12,
                   ),
                   SizedBox(width: 8.w),
-                  PullDownButton(
-                    itemBuilder: (context) => [
-                      PullDownMenuItem(
-                        onTap: () => _showProposalAddWorkBottomSheet(
-                          context,
-                          scopeId: widget.scopeId,
-                          work: widget.work,
+                  if (widget.canEdit)
+                    PullDownButton(
+                      itemBuilder: (context) => [
+                        PullDownMenuItem(
+                          enabled: widget.canEdit,
+                          onTap: () => _showProposalAddWorkBottomSheet(
+                            context,
+                            scopeId: widget.scopeId,
+                            work: widget.work,
+                          ),
+                          title: context.s.edit,
+                          icon: CupertinoIcons.pencil,
                         ),
-                        title: context.s.edit,
-                        icon: CupertinoIcons.pencil,
-                      ),
-                      PullDownMenuItem(
-                        onTap: () => context
-                            .read<ProposalDetailCubit>()
-                            .removeProposalWork(
-                              widget.scopeId,
-                              widget.work.id ?? '',
-                            ),
-                        title: context.s.delete,
-                        isDestructive: true,
-                        icon: CupertinoIcons.delete,
-                      ),
-                    ],
-                    buttonBuilder: (context, showMenu) => GestureDetector(
-                      onTap: showMenu,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 4.w,
-                          vertical: 4.h,
+                        PullDownMenuItem(
+                          enabled: widget.canEdit,
+                          onTap: () => context
+                              .read<ProposalDetailCubit>()
+                              .removeProposalWork(
+                                widget.scopeId,
+                                widget.work.id ?? '',
+                              ),
+                          title: context.s.delete,
+                          isDestructive: true,
+                          icon: CupertinoIcons.delete,
                         ),
-                        child: Icon(
-                          Icons.more_vert_outlined,
-                          size: 20.sp,
-                          color: ColorName.gray55,
+                      ],
+                      buttonBuilder: (context, showMenu) => GestureDetector(
+                        onTap: showMenu,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 4.w,
+                            vertical: 4.h,
+                          ),
+                          child: Icon(
+                            Icons.more_vert_outlined,
+                            size: 20.sp,
+                            color: ColorName.gray55,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   Icon(
                     _isExpanded
                         ? Icons.keyboard_arrow_up
@@ -137,6 +143,7 @@ class _ProposalWorkCardState extends State<ProposalWorkCard> {
                   scopeId: widget.scopeId,
                   workId: widget.work.id ?? '',
                   item: item,
+                  canEdit: widget.canEdit,
                   onEdit: () => _showProposalAddItemBottomSheet(
                     context,
                     scopeId: widget.scopeId,

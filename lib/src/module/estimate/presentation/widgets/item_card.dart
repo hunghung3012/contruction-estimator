@@ -3,6 +3,7 @@ part of '../estimate_detail_page.dart';
 class ItemCard extends StatelessWidget {
   final EstimateItem item;
   final String unit;
+  final bool canEdit;
   final Function(String id) onEdit;
   final Function(String id) onDelete;
 
@@ -12,6 +13,7 @@ class ItemCard extends StatelessWidget {
     required this.unit,
     required this.onEdit,
     required this.onDelete,
+    this.canEdit = true,
   });
 
   @override
@@ -60,11 +62,13 @@ class ItemCard extends StatelessWidget {
           PullDownButton(
             itemBuilder: (context) => [
               PullDownMenuItem(
+                enabled: canEdit,
                 onTap: () => onEdit(item.id ?? ''),
                 title: context.s.edit,
                 icon: CupertinoIcons.pencil,
               ),
               PullDownMenuItem(
+                enabled: canEdit,
                 onTap: () => onDelete(item.id ?? ''),
                 title: context.s.delete,
                 isDestructive: true,

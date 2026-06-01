@@ -1,7 +1,7 @@
 part of '../proposal_detail_page.dart';
 
 extension _ProposalEditTabExtension on _ProposalDetailBodyState {
-  Widget _buildEditTab(ProposalDetailState state) {
+  Widget _buildEditTab(ProposalDetailState state, bool canEdit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -9,18 +9,20 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
 
         // Company & Client Info
         _CompanyCard(
+          canEdit: canEdit,
           companyNameController: _companyNameController,
           emailController: _emailController,
           phoneController: _phoneController,
           addressController: _addressController,
         ),
         SizedBox(height: 20.h),
-        const _ClientCard(),
+        _ClientCard(canEdit: canEdit),
         SizedBox(height: 20.h),
 
         // Title
         AppTextField(
           controller: _titleController,
+          readOnly: !canEdit,
           hintText: context.s.untitled_template,
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -35,6 +37,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         _buildRichTextEditor(
           _introQuillController,
           context.s.enter_introduction,
+          canEdit,
         ),
         SizedBox(height: 20.h),
 
@@ -43,12 +46,16 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         _buildRichTextEditor(
           _overviewQuillController,
           context.s.enter_overview,
+          canEdit,
         ),
         SizedBox(height: 20.h),
 
         // Scope of Work
         _buildSectionTitle(context.s.scope_of_work),
-        ScopeOfWorkWidget(scopes: state.proposal?.scopeOfWork),
+        ScopeOfWorkWidget(
+          scopes: state.proposal?.scopeOfWork,
+          canEdit: canEdit,
+        ),
 
         SizedBox(height: 12.h),
         // Financial Summary
@@ -57,6 +64,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
           currencyUnit: state.proposal?.currencyUnit ?? '\$',
           discountController: _discountController,
           taxController: _taxController,
+          canEdit: canEdit,
         ),
 
         SizedBox(height: 30.h),
@@ -68,6 +76,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
               child: _buildDatePicker(
                 label: context.s.start_date,
                 date: state.proposal?.startDate,
+                canEdit: canEdit,
                 onChanged: (date) =>
                     context.read<ProposalDetailCubit>().onChangeStartDate(date),
               ),
@@ -77,6 +86,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
               child: _buildDatePicker(
                 label: context.s.end_date,
                 date: state.proposal?.endDate,
+                canEdit: canEdit,
                 onChanged: (date) =>
                     context.read<ProposalDetailCubit>().onChangeEndDate(date),
               ),
@@ -85,20 +95,11 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         ),
         SizedBox(height: 20.h),
 
-        // // Client Message
-        // _buildSectionTitle(context.s.client_message),
-        // AppTextField(
-        //   controller: _clientMessageController,
-        //   hintText: context.s.enter_client_message,
-        //   maxLines: 3,
-        //   borderRadius: BorderRadius.circular(8.r),
-        // ),
-        // SizedBox(height: 20.h),
-
         // Payment term
         _buildSectionTitle(context.s.payment_term),
         AppTextField(
           controller: _paymentTermController,
+          readOnly: !canEdit,
           hintText: context.s.enter_payment_term,
           maxLines: 2,
           borderRadius: BorderRadius.circular(8.r),
@@ -106,13 +107,14 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         SizedBox(height: 20.h),
 
         //Terms and Condition
-        _TermWidget(state.currentTerm),
+        _TermWidget(state.currentTerm, canEdit: canEdit),
         SizedBox(height: 20.h),
 
         // Warranty
         _buildSectionTitle(context.s.warranty),
         AppTextField(
           controller: _warrantyController,
+          readOnly: !canEdit,
           hintText: context.s.enter_warranty,
           maxLines: 2,
           borderRadius: BorderRadius.circular(8.r),
@@ -122,6 +124,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         _buildSectionTitle(context.s.exclusion),
         AppTextField(
           controller: _exclusionController,
+          readOnly: !canEdit,
           hintText: context.s.enter_exclusion,
           maxLines: 2,
           borderRadius: BorderRadius.circular(8.r),
@@ -131,6 +134,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         _buildSectionTitle(context.s.payment_info),
         AppTextField(
           controller: _paymentInfoController,
+          readOnly: !canEdit,
           hintText: context.s.enter_payment_info,
           maxLines: 2,
           borderRadius: BorderRadius.circular(8.r),
@@ -141,6 +145,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         _buildSectionTitle(context.s.note),
         AppTextField(
           controller: _noteController,
+          readOnly: !canEdit,
           hintText: context.s.note,
           maxLines: 2,
           borderRadius: BorderRadius.circular(8.r),
@@ -148,14 +153,16 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
         SizedBox(height: 20.h),
 
         // Actions
-        SizedBox(height: 16.h),
-        AppButton(
-          title: context.s.send,
-          buttonType: ButtonType.outline,
-          onPressed: () {
-            // TODO: Send proposal action
-          },
-        ),
+        if (canEdit) ...[
+          SizedBox(height: 16.h),
+          AppButton(
+            title: context.s.send,
+            buttonType: ButtonType.outline,
+            onPressed: () {
+              // TODO: Send proposal action
+            },
+          ),
+        ],
         SizedBox(height: 24.h),
       ],
     );
@@ -174,7 +181,11 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
     );
   }
 
-  Widget _buildRichTextEditor(QuillController controller, String hint) {
+  Widget _buildRichTextEditor(
+    QuillController controller,
+    String hint,
+    bool canEdit,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -183,42 +194,46 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
       ),
       child: Column(
         children: [
-          QuillSimpleToolbar(
-            controller: controller,
-            config: const QuillSimpleToolbarConfig(
-              showBoldButton: true,
-              showItalicButton: true,
-              showListBullets: true,
-              showListNumbers: true,
-              multiRowsDisplay: false,
-              showFontFamily: false,
-              showFontSize: false,
-              showSmallButton: false,
-              showUnderLineButton: false,
-              showLineHeightButton: false,
-              showStrikeThrough: false,
-              showInlineCode: false,
-              showColorButton: false,
-              showBackgroundColorButton: false,
-              showClearFormat: false,
-              showAlignmentButtons: false,
-              showRedo: false,
-              showUndo: false,
-              showSearchButton: false,
-              showCodeBlock: false,
-              showQuote: false,
-              showLink: false,
-              showDividers: false,
-              showHeaderStyle: false,
-              showListCheck: false,
-              showDirection: false,
-              showIndent: false,
+          if (canEdit)
+            QuillSimpleToolbar(
+              controller: controller,
+              config: const QuillSimpleToolbarConfig(
+                showBoldButton: true,
+                showItalicButton: true,
+                showListBullets: true,
+                showListNumbers: true,
+                multiRowsDisplay: false,
+                showFontFamily: false,
+                showFontSize: false,
+                showSmallButton: false,
+                showUnderLineButton: false,
+                showLineHeightButton: false,
+                showStrikeThrough: false,
+                showInlineCode: false,
+                showColorButton: false,
+                showBackgroundColorButton: false,
+                showClearFormat: false,
+                showAlignmentButtons: false,
+                showRedo: false,
+                showUndo: false,
+                showSearchButton: false,
+                showCodeBlock: false,
+                showQuote: false,
+                showLink: false,
+                showDividers: false,
+                showHeaderStyle: false,
+                showListCheck: false,
+                showDirection: false,
+                showIndent: false,
+              ),
             ),
-          ),
           Container(
             height: 120.h,
             padding: EdgeInsets.all(12.r),
-            child: QuillEditor.basic(controller: controller),
+            child: IgnorePointer(
+              ignoring: !canEdit,
+              child: QuillEditor.basic(controller: controller),
+            ),
           ),
         ],
       ),
@@ -228,6 +243,7 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
   Widget _buildDatePicker({
     required String label,
     required DateTime? date,
+    required bool canEdit,
     required Function(DateTime) onChanged,
   }) {
     final displayText = date != null ? date.localized : context.s.select_date;
@@ -236,15 +252,17 @@ extension _ProposalEditTabExtension on _ProposalDetailBodyState {
       clipBehavior: Clip.none,
       children: [
         GestureDetector(
-          onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: date ?? DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2101),
-            );
-            if (picked != null) onChanged(picked);
-          },
+          onTap: !canEdit
+              ? null
+              : () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: date ?? DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (picked != null) onChanged(picked);
+                },
           child: Container(
             height: 48.h,
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -291,12 +309,14 @@ class _ProposalPriceCard extends StatefulWidget {
   final double subtotal;
   final TextEditingController discountController;
   final TextEditingController taxController;
+  final bool canEdit;
 
   const _ProposalPriceCard({
     required this.currencyUnit,
     required this.subtotal,
     required this.discountController,
     required this.taxController,
+    required this.canEdit,
   });
 
   @override
@@ -346,10 +366,12 @@ class _ProposalPriceCardState extends State<_ProposalPriceCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () {
-              setState(() => _isDiscountPercentage = true);
-              _updateDiscount();
-            },
+            onTap: !widget.canEdit
+                ? null
+                : () {
+                    setState(() => _isDiscountPercentage = true);
+                    _updateDiscount();
+                  },
             child: Container(
               width: 28.w,
               height: 28.w,
@@ -372,10 +394,12 @@ class _ProposalPriceCardState extends State<_ProposalPriceCard> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              setState(() => _isDiscountPercentage = false);
-              _updateDiscount();
-            },
+            onTap: !widget.canEdit
+                ? null
+                : () {
+                    setState(() => _isDiscountPercentage = false);
+                    _updateDiscount();
+                  },
             child: Container(
               width: 28.w,
               height: 28.w,
@@ -442,6 +466,7 @@ class _ProposalPriceCardState extends State<_ProposalPriceCard> {
                   AppTextField(
                     width: 100.w,
                     controller: widget.discountController,
+                    readOnly: !widget.canEdit,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
@@ -471,6 +496,7 @@ class _ProposalPriceCardState extends State<_ProposalPriceCard> {
                   AppTextField(
                     width: 70.w,
                     controller: widget.taxController,
+                    readOnly: !widget.canEdit,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),

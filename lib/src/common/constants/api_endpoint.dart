@@ -3,10 +3,13 @@ class ApiEndpoint {
 
   //Chat
   static const String chat = '/chat';
+  static const String chatHistory = '/users/{userId}/projects/{projectId}/chat/messages';
 
   //Estimates
+  static const String createEstimate = '/projects/{projectId}/estimates';
   static const String updateEstimate = '/estimates/{id}';
   static const String getEstimate = '/estimates/{id}';
+  static const String deleteEstimate = '/estimates/{estimateId}';
   static const String convertEstimateToInvoice =
       '/users/{userId}/estimates/{estimateId}/invoice';
   static const String createProposalFromEstimate =
@@ -39,6 +42,12 @@ class ApiEndpoint {
   static const updateProposal = '/proposals/{proposalId}';
   static const deleteProposal = '/proposals/{proposalId}';
   static const deleteAllProposals = '/users/{userId}/proposals';
+
+  //Change Orders
+  static const changeOrders = '/users/{userId}/change-orders';
+  static const createChangeOrder = '/users/{userId}/change-orders';
+  static const updateChangeOrder = '/change-orders/{changeOrderId}';
+  static const deleteChangeOrder = '/change-orders/{changeOrderId}';
 
   //Clients
   static const String client = '/users/{userId}/clients/{clientId}';

@@ -5,11 +5,13 @@ class _CompanyCard extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController phoneController;
   final TextEditingController addressController;
+  final bool canEdit;
   const _CompanyCard({
     required this.companyNameController,
     required this.emailController,
     required this.phoneController,
     required this.addressController,
+    required this.canEdit,
   });
 
   @override
@@ -27,9 +29,11 @@ class _CompanyCard extends StatelessWidget {
                   ),
                 )
               : Assets.icons.icImage.svg(width: 24.w, color: ColorName.gray99),
-          onTap: () {
-            context.read<ProposalDetailCubit>().pickLogoImage(context);
-          },
+          onTap: !canEdit
+              ? null
+              : () {
+                  context.read<ProposalDetailCubit>().pickLogoImage(context);
+                },
           padding: context.watch<ProposalDetailCubit>().state.logoFile != null
               ? 0
               : 16,
@@ -37,24 +41,28 @@ class _CompanyCard extends StatelessWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: companyNameController,
+          readOnly: !canEdit,
           hintText: context.s.company_name,
           borderRadius: BorderRadius.circular(8.r),
         ),
         const SizedBox(height: 8),
         AppTextField(
           controller: emailController,
+          readOnly: !canEdit,
           hintText: context.s.email,
           borderRadius: BorderRadius.circular(8.r),
         ),
         const SizedBox(height: 8),
         AppTextField(
           controller: phoneController,
+          readOnly: !canEdit,
           hintText: context.s.phone_number,
           borderRadius: BorderRadius.circular(8.r),
         ),
         const SizedBox(height: 8),
         AppTextField(
           controller: addressController,
+          readOnly: !canEdit,
           hintText: context.s.address,
           borderRadius: BorderRadius.circular(8.r),
         ),

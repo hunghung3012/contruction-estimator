@@ -1,7 +1,9 @@
 part of '../proposal_detail_page.dart';
 
 class _ProposalAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _ProposalAppBar();
+  const _ProposalAppBar(this.canEdit);
+
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -10,29 +12,35 @@ class _ProposalAppBar extends StatelessWidget implements PreferredSizeWidget {
         return AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: AppCircleButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
-              onTap: () {
-                if (state.isEditing) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AppCupertinoAlertDialog(
-                      title: context.s.discard_changes,
-                      content: context.s.unsaved_changes,
-                      submitButtonTitle: context.s.discard,
-                      onSubmit: () {
-                        context.router.pop();
-                      },
+          leading: !canEdit
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: AppCircleButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 20,
                     ),
-                  );
-                } else {
-                  context.router.pop();
-                }
-              },
-            ),
-          ),
+                    onTap: () {
+                      if (state.isEditing) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AppCupertinoAlertDialog(
+                            title: context.s.discard_changes,
+                            content: context.s.unsaved_changes,
+                            submitButtonTitle: context.s.discard,
+                            onSubmit: () {
+                              context.router.pop();
+                            },
+                          ),
+                        );
+                      } else {
+                        context.router.pop();
+                      }
+                    },
+                  ),
+                ),
           leadingWidth: 56,
           title: AppText(
             context.s.proposal,
@@ -40,31 +48,34 @@ class _ProposalAppBar extends StatelessWidget implements PreferredSizeWidget {
             fontWeight: FontWeight.w700,
           ),
           centerTitle: true,
-          actions: [
-            AppText(
-              context.s.save,
-              fontWeight: FontWeight.w500,
-              textColor: (state.isEditing && !state.isLoading)
-                  ? ColorName.primary
-                  : ColorName.gray55,
-              ignorePointer: !(state.isEditing && !state.isLoading),
-              onTap: () => context.read<ProposalDetailCubit>().saveProposal(),
-            ),
+          actions: !canEdit
+              ? null
+              : [
+                  AppText(
+                    context.s.save,
+                    fontWeight: FontWeight.w500,
+                    textColor: (state.isEditing && !state.isLoading)
+                        ? ColorName.primary
+                        : ColorName.gray55,
+                    ignorePointer: !(state.isEditing && !state.isLoading),
+                    onTap: () =>
+                        context.read<ProposalDetailCubit>().saveProposal(),
+                  ),
 
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0, left: 16),
-              child: AppCircleButton(
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onTap: () {
-                  // TODO: Add menu actions like Export to PDF, Delete
-                },
-              ),
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0, left: 16),
+                    child: AppCircleButton(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      onTap: () {
+                        // TODO: Add menu actions like Export to PDF, Delete
+                      },
+                    ),
+                  ),
+                ],
         );
       },
     );

@@ -13,7 +13,7 @@ class EstimateCoreCubit extends Cubit<EstimateCoreState> {
 
   EstimateCoreCubit(this._repository) : super(const EstimateCoreState());
 
-  void init(Estimate estimator) {
+  void init(Estimate estimator, {bool isCreating = false}) {
     // Sanitize estimator by ensuring all categories and items have IDs
     final sanitizedCategories = estimator.categories?.asMap().entries.map((
       entry,
@@ -36,6 +36,7 @@ class EstimateCoreCubit extends Cubit<EstimateCoreState> {
       state.copyWith(
         estimator: sanitizedEstimator,
         initialEstimator: sanitizedEstimator,
+        isCreating: isCreating,
       ),
     );
   }
@@ -48,20 +49,66 @@ class EstimateCoreCubit extends Cubit<EstimateCoreState> {
       state.estimator!,
     );
     result.fold(
-      (success) {
+      (estimate) {
         emit(
           state.copyWith(
-            initialEstimator: success,
-            estimator: success,
+            initialEstimator: estimate,
+            estimator: estimate,
             isSaving: false,
+            saveOutcome: EstimateSaveOutcome(success: true, isCreate: false),
           ),
         );
       },
       (error) {
         logger.e("Error updating estimate: $error");
-        emit(state.copyWith(isSaving: false));
+        emit(
+          state.copyWith(
+            isSaving: false,
+            saveOutcome: EstimateSaveOutcome(
+              success: false,
+              isCreate: false,
+              errorMessage: error.message,
+            ),
+          ),
+        );
       },
     );
+  }
+
+  void create(String? projectId) async {
+    if (state.estimator == null) return;
+    emit(state.copyWith(isSaving: true));
+    final result = await _repository.create(projectId ?? '', state.estimator!);
+    result.fold(
+      (estimate) {
+        emit(
+          state.copyWith(
+            initialEstimator: estimate,
+            estimator: estimate,
+            isSaving: false,
+            isCreating: false,
+            saveOutcome: EstimateSaveOutcome(success: true, isCreate: true),
+          ),
+        );
+      },
+      (error) {
+        logger.e("Error creating estimate: $error");
+        emit(
+          state.copyWith(
+            isSaving: false,
+            saveOutcome: EstimateSaveOutcome(
+              success: false,
+              isCreate: true,
+              errorMessage: error.message,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void clearOutcome() {
+    emit(state.copyWith(clearSaveOutcome: true));
   }
 
   void deleteItem(String categoryId, String itemId) {

@@ -2,7 +2,8 @@ part of '../../proposal_detail_page.dart';
 
 class _TermWidget extends StatelessWidget {
   final TermModel? term;
-  const _TermWidget(this.term);
+  final bool canEdit;
+  const _TermWidget(this.term, {required this.canEdit});
 
   void _showTermsBottomSheet(BuildContext context) {
     showModalBottomSheet<TermModel?>(
@@ -71,6 +72,7 @@ class _TermWidget extends StatelessWidget {
                         ),
                         itemBuilder: (context) => [
                           PullDownMenuItem(
+                            enabled: canEdit,
                             title: context.s.edit,
                             icon: Icons.edit,
                             onTap: () => context.router.push<TermModel?>(
@@ -78,6 +80,7 @@ class _TermWidget extends StatelessWidget {
                             ),
                           ),
                           PullDownMenuItem(
+                            enabled: canEdit,
                             title: context.s.remove,
                             icon: Icons.delete,
                             onTap: () => context
@@ -85,6 +88,7 @@ class _TermWidget extends StatelessWidget {
                                 .onChangeTerm(null),
                           ),
                           PullDownMenuItem(
+                            enabled: canEdit,
                             title: context.s.change_other_terms,
                             icon: Icons.list,
                             onTap: () => _showTermsBottomSheet(context),
@@ -113,6 +117,7 @@ class _TermWidget extends StatelessWidget {
       );
     }
 
+    if (!canEdit) return const SizedBox.shrink();
     return GestureDetector(
       onTap: () => _showTermsBottomSheet(context),
       child: Padding(

@@ -1,3 +1,4 @@
+import 'package:construction_estimator/src/module/invoice/domain/model/invoice_status.dart';
 import 'package:equatable/equatable.dart';
 import '../../../estimate/domain/model/estimate.dart';
 
@@ -29,6 +30,8 @@ class Invoice extends Equatable {
   final DateTime? updatedAt;
   final DateTime? dueDate;
 
+  final InvoiceStatus? status;
+
   const Invoice({
     this.id,
     this.userId,
@@ -55,6 +58,7 @@ class Invoice extends Equatable {
     this.createdAt,
     this.updatedAt,
     this.dueDate,
+    this.status,
   });
 
   Invoice copyWith({
@@ -79,6 +83,7 @@ class Invoice extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? dueDate,
+    InvoiceStatus? status,
   }) {
     return Invoice(
       id: id ?? this.id,
@@ -102,6 +107,7 @@ class Invoice extends Equatable {
       note: note ?? this.note,
       termsAndConditions: termsAndConditions ?? this.termsAndConditions,
       discountAmount: discountAmount ?? this.discountAmount,
+      status: status ?? this.status,
     );
   }
 
@@ -140,6 +146,10 @@ class Invoice extends Equatable {
         ? null
         : DateTime.parse(json["updatedAt"]),
     dueDate: json["date"] == null ? null : DateTime.parse(json["date"]),
+
+    status: json["status"] == null
+        ? null
+        : InvoiceStatus.fromString(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -171,6 +181,8 @@ class Invoice extends Equatable {
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "date": dueDate?.toIso8601String(),
+
+    "status": status?.name,
   };
 
   @override
@@ -196,6 +208,7 @@ class Invoice extends Equatable {
     createdAt,
     updatedAt,
     dueDate,
+    status,
   ];
 
   double get discountValue =>

@@ -16,6 +16,16 @@ class EstimateRepository {
 
   EstimateRepository(this._api);
 
+  Future<Result<Estimate, ApiError>> create(
+    String projectId,
+    Estimate request, {
+    CancelToken? token,
+  }) async {
+    final userId = AppStorage.userId;
+    var result = _api.create(projectId, userId ?? '', request, token);
+    return result.tryGet((response) => response.data);
+  }
+
   Future<Result<Estimate, ApiError>> update(
     String id,
     Estimate request, {

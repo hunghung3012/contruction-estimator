@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:construction_estimator/src/module/chat/data/response/chat_response.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:construction_estimator/src/module/chat/domain/repository/chat_repository.dart';
+import '../../../common/event/reload_estimates_list_event.dart';
 import '../../../common/event/reload_project_list_event.dart';
 import 'package:injectable/injectable.dart';
 
@@ -11,13 +13,13 @@ import '../domain/models/chat_message.dart';
 
 part 'chatting_state.dart';
 
-@lazySingleton
+@injectable
 class ChattingCubit extends Cubit<ChattingState> {
   final ChatRepository _chatRepository;
   final EventBus _eventBus;
 
   ChattingCubit(this._chatRepository, this._eventBus)
-      : super(const ChattingState());
+    : super(const ChattingState());
 
   void reset() => emit(const ChattingState());
 
@@ -58,6 +60,7 @@ class ChattingCubit extends Cubit<ChattingState> {
 
         if (hasEstimator) {
           _eventBus.fire(ReloadProjectListEvent());
+          _eventBus.fire(ReloadEstimatesListEvent());
         }
 
         emit(
@@ -110,13 +113,47 @@ class ChattingCubit extends Cubit<ChattingState> {
 
     final updatedMessages = state.messages.map((msg) {
       if (msg.content.estimator?.id == estimate.id) {
-        return msg.copyWith(
-          content: msg.content.copyWith(estimator: estimate),
-        );
+        return msg.copyWith(content: msg.content.copyWith(estimator: estimate));
       }
       return msg;
     }).toList();
 
     emit(state.copyWith(messages: updatedMessages));
+  }
+
+  void updateLocation(String location) {
+    emit(state.copyWith(location: location));
+  }
+
+  void updateConversationId(String conversationId) {
+    emit(state.copyWith(conversationId: conversationId));
+  }
+
+  void updateProjectId(String projectId) {
+    emit(state.copyWith(projectId: projectId));
+  }
+
+  void getChatHistory(String projectId) async {
+    final result = await _chatRepository.getChatHistory(projectId);
+
+    result.fold(
+      (success) {
+        List<ChatMessage> historyMessages = [];
+        for(var item in success.items) {
+          for (var message in (item.assistantContents ?? [])) {
+            final chatMessage = ChatMessage(
+              content: message,
+              isUser: item.role == ChatResponseRole.user,
+              timestamp: DateTime.now(), //TODO: Get timestamp from response
+            );
+            historyMessages.add(chatMessage);
+          }
+        }
+        emit(state.copyWith(messages: [...state.messages, ...historyMessages]));
+      },
+      (failure) {
+        // Handle error if needed
+      },
+    );
   }
 }

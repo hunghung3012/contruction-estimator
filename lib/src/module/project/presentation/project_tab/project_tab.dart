@@ -108,7 +108,7 @@ class _Header extends StatelessWidget {
       children: [
         Expanded(
           child: AppText(
-            'Projects',
+            context.s.project,
             fontSize: 26,
             fontWeight: FontWeight.w700,
             textAlign: TextAlign.left,
@@ -275,6 +275,8 @@ class _ProjectList extends StatelessWidget {
             final project = state.tabs[state.selectedStatus?.id]?.data[index];
             return _ProjectCard(
               project: project!,
+              onTap: () =>
+                  context.router.push(ProjectDetailRoute(project: project)),
               onTapProjectStatus: () =>
                   _showStatusBottomSheet(context, project),
             );

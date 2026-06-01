@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../../estimate/domain/model/estimate.dart';
+import 'proposal_status.dart';
 
 class Proposal extends Equatable {
   final String? id;
@@ -36,6 +37,8 @@ class Proposal extends Equatable {
   final String? sourceEstimateId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+
+  final ProposalStatus? status;
 
   String get currencyUnit {
     if (scopeOfWork != null && (scopeOfWork ?? []).isNotEmpty) {
@@ -85,6 +88,7 @@ class Proposal extends Equatable {
     this.sourceEstimateId,
     this.createdAt,
     this.updatedAt,
+    this.status,
   });
 
   @override
@@ -117,6 +121,7 @@ class Proposal extends Equatable {
     sourceEstimateId,
     createdAt,
     updatedAt,
+    status,
   ];
 
   Proposal copyWith({
@@ -148,6 +153,7 @@ class Proposal extends Equatable {
     List<ScopeOfWork>? scopeOfWork,
     DateTime? createdAt,
     DateTime? updatedAt,
+    ProposalStatus? status,
   }) {
     return Proposal(
       id: id ?? this.id,
@@ -178,6 +184,7 @@ class Proposal extends Equatable {
       scopeOfWork: scopeOfWork ?? this.scopeOfWork,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      status: status ?? this.status,
     );
   }
 
@@ -226,6 +233,9 @@ class Proposal extends Equatable {
     updatedAt: json["updatedAt"] == null
         ? null
         : DateTime.parse(json["updatedAt"]),
+    status: json["status"] == null
+        ? null
+        : ProposalStatus.fromString(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -259,6 +269,7 @@ class Proposal extends Equatable {
     "sourceEstimateId": sourceEstimateId,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
+    "status": status?.name,
   };
 }
 

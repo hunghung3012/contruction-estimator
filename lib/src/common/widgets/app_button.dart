@@ -6,6 +6,7 @@ import '../extension/optional_x.dart';
 import '../extension/string_x.dart';
 import '../../../generated/colors.gen.dart';
 import '../constants/ui_const.dart';
+import 'app_text.dart';
 
 enum ButtonType { normal, outline }
 
@@ -130,9 +131,11 @@ final class AppButton extends StatelessWidget {
                       prefixIcon ?? const SizedBox.shrink(),
                       SizedBox(width: prefixIcon == null ? 0 : spacing.w),
                       Flexible(
-                        child: Text(
+                        child: AppText(
                           title.getTextByCasing(style.textCase ?? textCase),
                           textAlign: TextAlign.center,
+                          maxLines: 1,
+                          enableAutoResize: true,
                           style:
                               style.textStyle ??
                               context.textTheme.semiBold.copyWith(

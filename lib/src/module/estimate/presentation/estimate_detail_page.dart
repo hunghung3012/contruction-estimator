@@ -24,6 +24,7 @@ import '../application/editor/estimate_editor_state.dart';
 import '../application/actions/estimate_actions_cubit.dart';
 import '../application/actions/estimate_actions_state.dart';
 import '../domain/model/estimate.dart';
+import '../domain/model/estimate_status.dart';
 
 part 'widgets/category_card.dart';
 part 'widgets/item_card.dart';
@@ -33,22 +34,53 @@ part 'widgets/input_textfield.dart';
 
 @RoutePage()
 class EstimateDetailPage extends StatelessWidget {
-  const EstimateDetailPage({super.key, required this.estimator});
+  const EstimateDetailPage({
+    super.key,
+    required this.estimator,
+    this.isCreating = false,
+    this.projectId,
+  });
 
   final Estimate estimator;
+  final bool isCreating;
+  final String? projectId;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<EstimateCoreCubit>()..init(estimator),
+          create: (context) => getIt<EstimateCoreCubit>()
+            ..init(estimator, isCreating: isCreating),
         ),
         BlocProvider(create: (context) => getIt<EstimateEditorCubit>()),
         BlocProvider(create: (context) => getIt<EstimateActionsCubit>()),
       ],
-      child: BlocBuilder<EstimateCoreCubit, EstimateCoreState>(
+      child: BlocConsumer<EstimateCoreCubit, EstimateCoreState>(
+        listenWhen: (prev, curr) =>
+            curr.saveOutcome != null && prev.saveOutcome != curr.saveOutcome,
+        listener: (context, state) {
+          final outcome = state.saveOutcome!;
+          final l10n = context.s;
+          final message = outcome.success
+              ? (outcome.isCreate ? l10n.create_success : l10n.save_success)
+              : (outcome.errorMessage?.isNotEmpty == true
+                    ? outcome.errorMessage!
+                    : (outcome.isCreate
+                          ? l10n.create_failed
+                          : l10n.save_failed));
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                backgroundColor: outcome.success ? Colors.green : Colors.red,
+                content: AppText(message, textColor: Colors.white),
+              ),
+            );
+          context.read<EstimateCoreCubit>().clearOutcome();
+        },
         builder: (context, state) {
+          final canEdit = state.estimator?.status?.canEdit ?? true;
           return Scaffold(
             appBar: AppBar(
               leading: AppCircleButton(
@@ -80,14 +112,18 @@ class EstimateDetailPage extends StatelessWidget {
                 },
               ),
               actions: [
-                if (state.isEditting)
+                if (state.isEditting || state.isCreating)
                   Padding(
                     padding: EdgeInsets.only(right: 12.w),
                     child: AppButton(
-                      width: 60.w,
+                      width: state.isCreating ? 120.w : 60.w,
                       height: 35.w,
-                      title: context.s.save,
-                      onPressed: () => context.read<EstimateCoreCubit>().save(),
+                      title: state.isCreating
+                          ? context.s.create_new_estimate
+                          : context.s.save,
+                      onPressed: () => state.isCreating
+                          ? context.read<EstimateCoreCubit>().create(projectId)
+                          : context.read<EstimateCoreCubit>().save(),
                       buttonType: ButtonType.outline,
                     ),
                   ),
@@ -138,9 +174,11 @@ class EstimateDetailPage extends StatelessWidget {
             body: SafeArea(
               child: Stack(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  AbsorbPointer(
+                    absorbing: state.isSaving,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                       //Category name + location
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -191,37 +229,48 @@ class EstimateDetailPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: UIConst.horizontalPadding.w,
-                          ),
-                          child: AppButton(
-                            width: 150.w,
-                            height: 35.w,
-                            spacing: 8,
-                            prefixIcon: Icon(
-                              Icons.add,
-                              size: 22.sp,
-                              color: ColorName.primary,
+                      if (canEdit)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              left: UIConst.horizontalPadding.w,
                             ),
-                            buttonType: ButtonType.outline,
-                            title: context.s.add_category,
-                            onPressed: () {
-                              context
-                                  .read<EstimateEditorCubit>()
-                                  .startAddingCategory();
-                            },
+                            child: AppButton(
+                              width: 150.w,
+                              height: 35.w,
+                              spacing: 8,
+                              prefixIcon: Icon(
+                                Icons.add,
+                                size: 22.sp,
+                                color: ColorName.primary,
+                              ),
+                              buttonType: ButtonType.outline,
+                              title: context.s.add_category,
+                              onPressed: () {
+                                context
+                                    .read<EstimateEditorCubit>()
+                                    .startAddingCategory();
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(child: const _CategoryList()),
-                      const _Footer(),
-                    ],
+                        Expanded(child: _CategoryList(canEdit: canEdit)),
+                        _Footer(canEdit: canEdit),
+                      ],
+                    ),
                   ),
                   const _AddItemOverlay(),
                   const _EditCategoryOverlay(),
+                  if (state.isSaving)
+                    Positioned.fill(
+                      child: ColoredBox(
+                        color: Colors.white.withValues(alpha: 0.6),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -236,7 +285,9 @@ class EstimateDetailPage extends StatelessWidget {
 // ─────────────────────────────────────────────────────────
 
 class _CategoryList extends StatefulWidget {
-  const _CategoryList();
+  const _CategoryList({required this.canEdit});
+
+  final bool canEdit;
 
   @override
   State<_CategoryList> createState() => _CategoryListState();
@@ -276,6 +327,7 @@ class _CategoryListState extends State<_CategoryList> {
 
             return CategoryCard(
               category: categories[index],
+              canEdit: widget.canEdit,
               onTap: () => _toggle(id),
               onEdit: () {
                 context.read<EstimateEditorCubit>().updateAddingToCategory(id);
@@ -322,7 +374,9 @@ class _CategoryListState extends State<_CategoryList> {
 // ─────────────────────────────────────────────────────────
 
 class _Footer extends StatefulWidget {
-  const _Footer();
+  const _Footer({required this.canEdit});
+
+  final bool canEdit;
 
   @override
   State<_Footer> createState() => _FooterState();
@@ -409,6 +463,7 @@ class _FooterState extends State<_Footer> {
                     textFieldWidth: 50.w,
                     controller: _markupController,
                     focusNode: _markupFocus,
+                    readOnly: !widget.canEdit,
                     onChanged: (v) => context
                         .read<EstimateCoreCubit>()
                         .updateMarkupPercent(int.tryParse(v) ?? 0),
@@ -435,6 +490,7 @@ class _FooterState extends State<_Footer> {
                     textFieldWidth: 50.w,
                     controller: _taxController,
                     focusNode: _taxFocus,
+                    readOnly: !widget.canEdit,
                     onChanged: (v) => context
                         .read<EstimateCoreCubit>()
                         .updateTaxPercent(int.tryParse(v) ?? 0),

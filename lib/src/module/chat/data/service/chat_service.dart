@@ -20,4 +20,12 @@ abstract class ChatApi {
     @Body() ChatRequest request,
     @CancelRequest() CancelToken? cancelToken,
   );
+
+  @GET(ApiEndpoint.chatHistory)
+  Future<PagingApiResponse<ChatResponse>> chatHistory(
+    @Path('projectId') String projectId,
+    @Path('userId') String userId,
+    @Query('cursor') String? cursor,
+    @CancelRequest() CancelToken? cancelToken,
+  );
 }

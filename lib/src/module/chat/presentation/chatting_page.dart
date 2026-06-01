@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:construction_estimator/src/common/extension/optional_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -27,7 +28,17 @@ part 'widgets/bot_avatar.dart';
 
 @RoutePage()
 class ChattingPage extends StatelessWidget {
-  const ChattingPage({super.key});
+  final String? projectId;
+  final String? conversationId;
+  final String? projectName;
+  final String? location;
+  const ChattingPage({
+    super.key,
+    this.projectId,
+    this.conversationId,
+    this.projectName,
+    this.location,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +50,31 @@ class ChattingPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: true,
-        body: SafeArea(child: ChattingBody()),
+        body: SafeArea(
+          child: ChattingBody(
+            projectId: projectId,
+            conversationId: conversationId,
+            projectName: projectName,
+            location: location,
+          ),
+        ),
       ),
     );
   }
 }
 
 class ChattingBody extends StatefulWidget {
-  const ChattingBody({super.key});
+  final String? projectId;
+  final String? conversationId;
+  final String? projectName;
+  final String? location;
+  const ChattingBody({
+    super.key,
+    this.projectId,
+    this.conversationId,
+    this.projectName,
+    this.location,
+  });
 
   @override
   State<ChattingBody> createState() => _ChattingBodyState();
@@ -61,6 +89,22 @@ class _ChattingBodyState extends State<ChattingBody> {
     super.initState();
     _controller = TextEditingController();
     _scrollController = ScrollController();
+
+    if (widget.projectId.isNotNull) {
+      context.read<ChattingCubit>().updateProjectId(widget.projectId!);
+      context.read<ChattingCubit>().getChatHistory(widget.projectId!);
+    }
+    if (widget.conversationId.isNotNull) {
+      context.read<ChattingCubit>().updateConversationId(
+        widget.conversationId!,
+      );
+    }
+    if (widget.location.isNotNull) {
+      context.read<ChattingCubit>().updateLocation(widget.location!);
+    }
+    if (widget.projectName.isNotNull) {
+      context.read<ChattingCubit>().setTitle(widget.projectName!);
+    }
   }
 
   @override
@@ -310,6 +354,8 @@ class _ChatList extends StatelessWidget {
             final result = await context.router.push(
               EstimateDetailRoute(
                 estimator: messages[index].content.estimator!,
+                isCreating: true,
+                projectId: cubit.state.projectId,
               ),
             );
 

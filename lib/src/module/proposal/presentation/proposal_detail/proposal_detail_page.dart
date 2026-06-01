@@ -30,6 +30,7 @@ import '../../../client/domain/model/client.dart';
 import '../../../estimate/domain/model/estimate.dart';
 import '../../cubit/proposal_detail_cubit.dart';
 import '../../domain/model/proposal.dart';
+import '../../domain/model/proposal_status.dart';
 
 part 'proposal_detail_widgets/proposal_app_bar.dart';
 part 'proposal_detail_widgets/proposal_tab_header.dart';
@@ -213,12 +214,13 @@ class _ProposalDetailBodyState extends State<ProposalDetailBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const _ProposalAppBar(),
-      backgroundColor: Colors.white,
-      body: BlocBuilder<ProposalDetailCubit, ProposalDetailState>(
-        builder: (context, state) {
-          return Padding(
+    return BlocBuilder<ProposalDetailCubit, ProposalDetailState>(
+      builder: (context, state) {
+        final canEdit = state.proposal?.status?.canEdit ?? true;
+        return Scaffold(
+          appBar: _ProposalAppBar(canEdit),
+          backgroundColor: Colors.white,
+          body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Column(
               children: [
@@ -232,16 +234,18 @@ class _ProposalDetailBodyState extends State<ProposalDetailBody> {
                   child: IndexedStack(
                     index: state.tab == ProposalTab.proposal ? 0 : 1,
                     children: [
-                      SingleChildScrollView(child: _buildEditTab(state)),
+                      SingleChildScrollView(
+                        child: _buildEditTab(state, canEdit),
+                      ),
                       SingleChildScrollView(child: _buildPreviewTab(state)),
                     ],
                   ),
                 ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

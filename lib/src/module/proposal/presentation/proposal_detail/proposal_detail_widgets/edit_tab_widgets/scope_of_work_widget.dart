@@ -2,8 +2,9 @@ part of '../../proposal_detail_page.dart';
 
 class ScopeOfWorkWidget extends StatelessWidget {
   final List<ScopeOfWork>? scopes;
+  final bool canEdit;
 
-  const ScopeOfWorkWidget({super.key, this.scopes});
+  const ScopeOfWorkWidget({super.key, this.scopes, this.canEdit = true});
 
   void _showAddScopeBottomSheet(BuildContext context, {ScopeOfWork? scope}) {
     final cubit = context.read<ProposalDetailCubit>();
@@ -23,6 +24,7 @@ class ScopeOfWorkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (scopes.isNull || scopes?.isEmpty == true) {
+      if (!canEdit) return const SizedBox.shrink();
       return GestureDetector(
         onTap: () => _showAddScopeBottomSheet(context),
         child: Padding(
@@ -61,15 +63,16 @@ class ScopeOfWorkWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: AppCircleButton(
-            backgroundColor: ColorName.primary,
-            icon: const Icon(Icons.add, color: Colors.white),
-            onTap: () => _showAddScopeBottomSheet(context),
-            padding: 12,
+        if (canEdit)
+          Align(
+            alignment: Alignment.centerRight,
+            child: AppCircleButton(
+              backgroundColor: ColorName.primary,
+              icon: const Icon(Icons.add, color: Colors.white),
+              onTap: () => _showAddScopeBottomSheet(context),
+              padding: 12,
+            ),
           ),
-        ),
         ...(scopes ?? []).map((scope) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,51 +91,61 @@ class ScopeOfWorkWidget extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                       ),
-                      PullDownButton(
-                        itemBuilder: (context) => [
-                          PullDownMenuItem(
-                            onTap: () => _showProposalAddWorkBottomSheet(
-                              context,
-                              scopeId: scope.id ?? '',
+                      if (canEdit)
+                        PullDownButton(
+                          itemBuilder: (context) => [
+                            PullDownMenuItem(
+                              enabled: canEdit,
+                              onTap: () => _showProposalAddWorkBottomSheet(
+                                context,
+                                scopeId: scope.id ?? '',
+                              ),
+                              title: context.s.add_category,
+                              icon: Icons.add,
                             ),
-                            title: context.s.add_category,
-                            icon: Icons.add,
-                          ),
-                          PullDownMenuItem(
-                            onTap: () =>
-                                _showAddScopeBottomSheet(context, scope: scope),
-                            title: context.s.edit,
-                            icon: CupertinoIcons.pencil,
-                          ),
-                          PullDownMenuItem(
-                            onTap: () => context
-                                .read<ProposalDetailCubit>()
-                                .removeScopeOfWork(scope.id ?? ''),
-                            title: context.s.delete,
-                            isDestructive: true,
-                            icon: CupertinoIcons.delete,
-                          ),
-                        ],
-                        buttonBuilder: (context, showMenu) => GestureDetector(
-                          onTap: showMenu,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8.w,
-                              vertical: 4.h,
+                            PullDownMenuItem(
+                              enabled: canEdit,
+                              onTap: () => _showAddScopeBottomSheet(
+                                context,
+                                scope: scope,
+                              ),
+                              title: context.s.edit,
+                              icon: CupertinoIcons.pencil,
                             ),
-                            child: Icon(
-                              Icons.more_horiz,
-                              size: 20.sp,
-                              color: ColorName.gray55,
+                            PullDownMenuItem(
+                              enabled: canEdit,
+                              onTap: () => context
+                                  .read<ProposalDetailCubit>()
+                                  .removeScopeOfWork(scope.id ?? ''),
+                              title: context.s.delete,
+                              isDestructive: true,
+                              icon: CupertinoIcons.delete,
+                            ),
+                          ],
+                          buttonBuilder: (context, showMenu) => GestureDetector(
+                            onTap: showMenu,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 4.h,
+                              ),
+                              child: Icon(
+                                Icons.more_horiz,
+                                size: 20.sp,
+                                color: ColorName.gray55,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
               ...?scope.works?.map(
-                (work) => ProposalWorkCard(work: work, scopeId: scope.id ?? ''),
+                (work) => ProposalWorkCard(
+                  work: work,
+                  scopeId: scope.id ?? '',
+                  canEdit: canEdit,
+                ),
               ),
             ],
           );

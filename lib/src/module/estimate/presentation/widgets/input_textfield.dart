@@ -10,6 +10,7 @@ class _InputSmallField extends StatelessWidget {
     this.keyboardType,
     this.prefix,
     this.textFieldWidth,
+    this.readOnly = false,
   });
 
   final String label;
@@ -20,6 +21,29 @@ class _InputSmallField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? prefix;
   final double? textFieldWidth;
+  final bool readOnly;
+
+  Widget _buildField() {
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      enabled: !readOnly,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      keyboardType: keyboardType,
+      textAlign: TextAlign.right,
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+        isDense: true,
+        contentPadding: EdgeInsets.zero,
+      ),
+      style: TextStyle(
+        color: ColorName.black07,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,49 +59,9 @@ class _InputSmallField extends StatelessWidget {
             enableAutoResize: true,
             padding: EdgeInsets.only(right: 8),
           ),
-
           textFieldWidth != null
-              ? SizedBox(
-                  width: textFieldWidth ?? double.infinity,
-                  child: TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    onChanged: onChanged,
-                    onSubmitted: onSubmitted,
-                    keyboardType: keyboardType,
-                    textAlign: TextAlign.right,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    style: TextStyle(
-                      color: ColorName.black07,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    onChanged: onChanged,
-                    onSubmitted: onSubmitted,
-                    keyboardType: keyboardType,
-                    textAlign: TextAlign.right,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    style: TextStyle(
-                      color: ColorName.black07,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+              ? SizedBox(width: textFieldWidth, child: _buildField())
+              : Expanded(child: _buildField()),
         ],
       ),
     );

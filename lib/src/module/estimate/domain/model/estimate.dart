@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../../../common/extension/double_x.dart';
+import 'estimate_status.dart';
 
 class Estimate {
   final String? id;
@@ -11,6 +12,7 @@ class Estimate {
   final int? taxPercent;
   final List<EstimateCategory>? categories;
   final bool? isActive;
+  final EstimateStatus? status;
 
   Estimate({
     this.id,
@@ -22,6 +24,7 @@ class Estimate {
     this.taxPercent,
     this.categories,
     this.isActive,
+    this.status,
   });
 
   Estimate copyWith({
@@ -34,6 +37,7 @@ class Estimate {
     int? taxPercent,
     List<EstimateCategory>? categories,
     bool? isActive,
+    EstimateStatus? status,
   }) {
     return Estimate(
       id: id ?? this.id,
@@ -45,6 +49,7 @@ class Estimate {
       taxPercent: taxPercent ?? this.taxPercent,
       categories: categories ?? this.categories,
       isActive: isActive ?? this.isActive,
+      status: status ?? this.status,
     );
   }
 
@@ -80,6 +85,9 @@ class Estimate {
             json["categories"]!.map((x) => EstimateCategory.fromJson(x)),
           ),
     isActive: json["isActive"],
+    status: json["status"] == null
+        ? null
+        : EstimateStatus.fromString(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -90,6 +98,7 @@ class Estimate {
     "currencyUnit": currencyUnit,
     "markupPercent": markupPercent,
     "taxPercent": taxPercent,
+    "status": status?.name,
     "categories": categories == null
         ? []
         : List<dynamic>.from(categories!.map((x) => x.toJson())),

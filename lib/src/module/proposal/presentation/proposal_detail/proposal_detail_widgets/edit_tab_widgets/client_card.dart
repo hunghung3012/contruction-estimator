@@ -1,7 +1,9 @@
 part of '../../proposal_detail_page.dart';
 
 class _ClientCard extends StatelessWidget {
-  const _ClientCard();
+  const _ClientCard({required this.canEdit});
+
+  final bool canEdit;
 
   void _showClientSelectionBottomSheet(BuildContext context) {
     showModalBottomSheet<Client?>(
@@ -24,7 +26,9 @@ class _ClientCard extends StatelessWidget {
 
         if (client != null) {
           return GestureDetector(
-            onTap: () => _showClientSelectionBottomSheet(context),
+            onTap: !canEdit
+                ? null
+                : () => _showClientSelectionBottomSheet(context),
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.all(16.r),
@@ -55,12 +59,14 @@ class _ClientCard extends StatelessWidget {
                       PullDownButton(
                         itemBuilder: (context) => [
                           PullDownMenuItem(
+                            enabled: canEdit,
                             onTap: () =>
                                 _showClientSelectionBottomSheet(context),
                             title: context.s.edit,
                             icon: CupertinoIcons.pencil,
                           ),
                           PullDownMenuItem(
+                            enabled: canEdit,
                             onTap: () {
                               context
                                   .read<ProposalDetailCubit>()
@@ -145,6 +151,7 @@ class _ClientCard extends StatelessWidget {
           );
         }
 
+        if (!canEdit) return const SizedBox.shrink();
         return GestureDetector(
           onTap: () => _showClientSelectionBottomSheet(context),
           child: Padding(

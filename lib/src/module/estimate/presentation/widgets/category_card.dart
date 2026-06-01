@@ -6,6 +6,7 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback onEdit;
   final bool isExpanded;
   final String unit;
+  final bool canEdit;
   final Function(String id) onEditItem;
   final Function(String id) onDeleteItem;
   final Function(String id, String currentName) onEditCategoryName;
@@ -21,6 +22,7 @@ class CategoryCard extends StatelessWidget {
     required this.onDeleteItem,
     required this.onEditCategoryName,
     required this.onDeleteCategory,
+    this.canEdit = true,
   });
 
   @override
@@ -40,18 +42,19 @@ class CategoryCard extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      InkWell(
-                        onTap: onEdit,
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 6),
-                          child: Icon(
-                            Icons.add_circle_outline_rounded,
-                            size: 20.sp,
-                            color: ColorName.primary,
+                      if (canEdit)
+                        InkWell(
+                          onTap: onEdit,
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 6),
+                            child: Icon(
+                              Icons.add_circle_outline_rounded,
+                              size: 20.sp,
+                              color: ColorName.primary,
+                            ),
                           ),
                         ),
-                      ),
                       Expanded(
                         child: AppText(
                           category.name ?? '',
@@ -84,6 +87,7 @@ class CategoryCard extends StatelessWidget {
                 PullDownButton(
                   itemBuilder: (context) => [
                     PullDownMenuItem(
+                      enabled: canEdit,
                       onTap: () => onEditCategoryName(
                         category.id ?? '',
                         category.name ?? '',
@@ -92,6 +96,7 @@ class CategoryCard extends StatelessWidget {
                       icon: CupertinoIcons.pencil,
                     ),
                     PullDownMenuItem(
+                      enabled: canEdit,
                       onTap: () => onDeleteCategory(category.id ?? ''),
                       title: context.s.delete,
                       isDestructive: true,
@@ -141,6 +146,7 @@ class CategoryCard extends StatelessWidget {
                       (item) => ItemCard(
                         item: item,
                         unit: unit,
+                        canEdit: canEdit,
                         onEdit: onEditItem,
                         onDelete: onDeleteItem,
                       ),

@@ -5,6 +5,7 @@ import 'package:retrofit/retrofit.dart';
 import '../../../../common/constants/api_endpoint.dart';
 import '../../../../core/datasource/remote/base/api_response.dart';
 import '../../domain/model/proposal.dart';
+import '../../domain/request/proposal_status_request.dart';
 
 part 'proposal_service.g.dart';
 
@@ -56,4 +57,13 @@ abstract class ProposalApi {
     @Body() Proposal? proposal,
     @CancelRequest() CancelToken? cancelToken,
   );
+
+  @PATCH(ApiEndpoint.updateProposal)
+  Future<StatusApiResponse> updateProposalStatus(
+    @Path('proposalId') String proposalId,
+    @Query('userId') String userId,
+    @Body() ProposalStatusRequest? statusRequest,
+    @CancelRequest() CancelToken? cancelToken,
+  );
+
 }

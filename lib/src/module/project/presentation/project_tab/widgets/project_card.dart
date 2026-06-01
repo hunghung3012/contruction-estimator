@@ -1,84 +1,88 @@
 part of '../project_tab.dart';
 
 class _ProjectCard extends StatelessWidget {
+  final VoidCallback onTap;
   final Project project;
   final VoidCallback onTapProjectStatus;
 
-  const _ProjectCard({required this.project, required this.onTapProjectStatus});
+  const _ProjectCard({required this.onTap, required this.project, required this.onTapProjectStatus});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: ColorName.primary.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: ColorName.primary.withValues(alpha: 0.5),
-          width: 1,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16.h),
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: ColorName.primary.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: ColorName.primary.withValues(alpha: 0.5),
+            width: 1,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppText(
-                project.updatedAt?.localized ??
-                    project.createdAt?.localized ??
-                    '',
-                fontSize: 12,
-                textColor: ColorName.gray99,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.5,
-              ),
-              Icon(Icons.more_vert, size: 20.w, color: ColorName.black33),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          AppText(
-            project.name ?? '',
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            textColor: ColorName.black33,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 12.h),
-          AppText(
-            '${project.estimate?.currencyUnit ?? ''} ${(project.estimate?.totalPrice ?? 0).formattedPrice}',
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            textColor: ColorName.black07,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 20.h),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 10.h,
-            children: [
-              _InfoTag(
-                icon: Icons.radio_button_unchecked,
-                label: project.projectStatus?.name ?? '',
-                onTap: onTapProjectStatus,
-                iconColor: project.projectStatus?.color,
-              ),
-              _InfoTag(
-                icon: Icons.person_outline_rounded,
-                label: context.s.client,
-              ),
-              _InfoTag(
-                icon: Icons.location_on_outlined,
-                label: project.estimate?.location ?? context.s.location,
-              ),
-              _InfoTag(
-                icon: Icons.person_off_outlined,
-                label: context.s.no_assignee,
-              ),
-            ],
-          ),
-        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText(
+                  project.updatedAt?.localized ??
+                      project.createdAt?.localized ??
+                      '',
+                  fontSize: 12,
+                  textColor: ColorName.gray99,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
+                Icon(Icons.more_vert, size: 20.w, color: ColorName.black33),
+              ],
+            ),
+            SizedBox(height: 10.h),
+            AppText(
+              project.name ?? '',
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              textColor: ColorName.black33,
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(height: 12.h),
+            AppText(
+              '${project.estimate?.currencyUnit ?? ''} ${(project.estimate?.totalPrice ?? 0).formattedPrice}',
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              textColor: ColorName.black07,
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(height: 20.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 10.h,
+              children: [
+                _InfoTag(
+                  icon: Icons.radio_button_unchecked,
+                  label: project.projectStatus?.name ?? '',
+                  onTap: onTapProjectStatus,
+                  iconColor: project.projectStatus?.color,
+                ),
+                _InfoTag(
+                  icon: Icons.person_outline_rounded,
+                  label: context.s.client,
+                ),
+                _InfoTag(
+                  icon: Icons.location_on_outlined,
+                  label: project.estimate?.location ?? context.s.location,
+                ),
+                _InfoTag(
+                  icon: Icons.person_off_outlined,
+                  label: context.s.no_assignee,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
